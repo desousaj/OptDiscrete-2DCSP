@@ -17,12 +17,12 @@ public class AlgoPlacement {
 	private static final int SANS_TOURNER = 0;
 	private static final int DEUX_SENS = 2;
 	private static final int IMPOSSIBLE = -1;
-	// Données de bases
+	// DonnÃ©es de bases
 	private Data data;
 	// Liste des bins pour la solution
 	private List<Bin> listBins = new ArrayList<Bin>();
 
-	// Map des bin de placement avec la clé correspondant à  l'indice du premier
+	// Map des bin de placement avec la clÃ© correspondant Ã  l'indice du premier
 	// bin de chaque pattern.
 	private Map<Integer, List<Bin>> mapBins;
 
@@ -39,7 +39,7 @@ public class AlgoPlacement {
 	}
 
 	public List<Bin> initAlgo() {
-		// Reinisialisation Id bin
+		// Reinitialisation Id bin
 		Bin.NB_BIN = 0;
 		List<Bin> binBases = new LinkedList<Bin>();
 		Bin bin = null;
@@ -59,7 +59,7 @@ public class AlgoPlacement {
 	}
 
 	public List<Bin> initAlgoBis(int i) {
-		// Reinisialisation Id bin
+		// Reinitialisation Id bin
 		Bin.NB_BIN = 0;
 		List<Bin> binBases = new LinkedList<Bin>();
 		Bin bin = null;
@@ -86,7 +86,7 @@ public class AlgoPlacement {
 			if (placementContinu) {
 				int indiceImage;
 				for (indiceImage = 0; indiceImage < composTotal.length; indiceImage++) {
-					// Si on a pas d'image a placer, on passe à l'indice suivant
+					// Si on a pas d'image a placer, on passe Ã  l'indice suivant
 					// sinon on la place et on construit les 2 bins "fils"
 					if (composTotal[indiceImage] > 0) {
 						for (int nb = composTotal[indiceImage]; nb > 0; nb--) {
@@ -131,7 +131,7 @@ public class AlgoPlacement {
 	}
 
 	/**
-	 * Fonction principale qui place les images passées en paramètres sur les
+	 * Fonction principale qui place les images passÃ©es en paramÃ¨tres sur les
 	 * bins. true si c'est bon, false sin on ne peut pas placer l'image
 	 * 
 	 * @param composTotal
@@ -145,7 +145,7 @@ public class AlgoPlacement {
 			if (placementContinu) {
 				int indiceImage;
 				for (indiceImage = 0; indiceImage < composTotal.length; indiceImage++) {
-					// Si on a pas d'image a placer, on passe à l'indice suivant
+					// Si on a pas d'image a placer, on passe Ã  l'indice suivant
 					// sinon
 					// on la place et on construit les 2 bins "fils"
 					if (composTotal[indiceImage] > 0) {
@@ -189,8 +189,8 @@ public class AlgoPlacement {
 	/**
 	 * Fonction qui test si c'est possible de placer au moins une fois toutes
 	 * les images sur les bins de base. Calcule l'aire total dispo des bins de
-	 * base et calcul l'aire de chaque image à placer. Si l'air des images est
-	 * supérieur à celle des bins, alors il n'y a pas de solution.
+	 * base et calcul l'aire de chaque image Ã  placer. Si l'air des images est
+	 * supÃ©rieur Ã  celle des bins, alors il n'y a pas de solution.
 	 * 
 	 * @param composTotal
 	 * @param binBases
@@ -211,15 +211,15 @@ public class AlgoPlacement {
 
 		// if (!(aireImages <= aireBins)) {
 		// System.out
-		// .println("La surface des images est supérieur à celle des planches.");
+		// .println("La surface des images est supÃ©rieur Ã  celle des planches.");
 		// }
 		return aireImages <= aireBins;
 
 	}
 
 	/**
-	 * Associe l'image au 1er bin de base si c'est possible et découpe ce bin
-	 * pour construire ses 2 "fils". Si l'image ne pas être placé, alors il n'y
+	 * Associe l'image au 1er bin de base si c'est possible et dÃ©coupe ce bin
+	 * pour construire ses 2 "fils". Si l'image ne pas Ãªtre placÃ©e, alors il n'y
 	 * a pas de solution possible et on retourne null.
 	 * 
 	 * @param binBases
@@ -228,7 +228,7 @@ public class AlgoPlacement {
 	 */
 	private Bin choixBin(List<Bin> bins, Image img) {
 		for (Bin bin : bins) {
-			// S'il s'agit d'un bin "fils", on peut le découper
+			// S'il s'agit d'un bin "fils", on peut le dï¿½couper
 			if (bin.isOk()) {
 				img.setRotate(false);
 				int isPossible = isPossible(bin, img);
@@ -261,13 +261,13 @@ public class AlgoPlacement {
 	}
 
 	/**
-	 * Fonction qui découpe le bin placé en paramètre selon la vertical ou
-	 * l'horizontal. Les deux bins "fils" sont créés et associés au bin passé en
-	 * paramètre. Le paramètre image correpsont à l'image à placer sur le bin
-	 * (en paramètre). Si l'image peut être placée selon les 2 découpes, on
-	 * privilégie la découpe qui créer les 2 bins avec les aires les plus
-	 * proches. La liste des bins est ensuite modifié (on ajoute les bins fils
-	 * et on met le père à false).
+	 * Fonction qui dÃ©coupe le bin placÃ© en paramÃ¨tre selon la vertical ou
+	 * l'horizontal. Les deux bins "fils" sont crÃ©Ã©s et associÃ©s au bin passÃ© en
+	 * paramÃ¨tre. Le paramÃ¨tre image correpsont Ã  l'image Ã  placer sur le bin
+	 * (en paramÃ¨tre). Si l'image peut Ãªtre placÃ©e selon les 2 dÃ©coupes, on
+	 * privilÃ©gie la dÃ©coupe qui crÃ©er les 2 bins avec les aires les plus
+	 * proches. La liste des bins est ensuite modifiÃ©e (on ajoute les bins fils
+	 * et on met le pÃ¨re Ã  false).
 	 * 
 	 * @param bins
 	 * 
@@ -333,16 +333,16 @@ public class AlgoPlacement {
 			}
 		} else {
 			System.out
-					.println("Problème : on essaye de placer un image sur un bin trop petit !");
+					.println("ProblÃ¨me : on essaye de placer un image sur un bin trop petit !");
 		}
 	}
 
 	/**
-	 * Retourne un entier qui indique si l'image peut être placé sur le bin
-	 * passé en paramètre. Plusieurs cas sont possibles : -1 impossible de
-	 * placer l'image, 0 l'image peut être placé telle qu'elle est, 1 l'image
-	 * peut être placée en la tournant, 2 les 2 cas possibles (limage peut être
-	 * placée dans les 2 sens)
+	 * Retourne un entier qui indique si l'image peut Ãªtre placÃ© sur le bin
+	 * passÃ© en paramÃ¨tre. Plusieurs cas sont possibles : -1 impossible de
+	 * placer l'image, 0 l'image peut Ãªtre placÃ©e telle qu'elle est, 1 l'image
+	 * peut Ãªtre placÃ©e en la tournant, 2 les 2 cas possibles (limage peut Ãªtre
+	 * placÃ©e dans les 2 sens)
 	 * 
 	 * @param bin
 	 * @param img

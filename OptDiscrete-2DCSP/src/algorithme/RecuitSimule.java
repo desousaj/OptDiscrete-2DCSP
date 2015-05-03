@@ -24,27 +24,27 @@ public class RecuitSimule {
 
 	protected Data data;
 
-	/** La solution courante du recuit simulé. */
+	/** La solution courante du recuit simulÃ©. */
 	protected Solution solutionCourante;
-	/** La meilleure solution trouvée pour le moment. */
+	/** La meilleure solution trouvÃ©e pour le moment. */
 	protected Solution meilleureSolution;
-	/** Le facteur de décroissance de la température du recuit. */
+	/** Le facteur de dÃ©croissance de la tempÃ©rature du recuit. */
 	protected double facteurDecroissance;
-	/** La température du recuit. */
+	/** La tempÃ©rature du recuit. */
 	protected double temperature;
-	/** La température à atteindre pour arrêter le recuit. */
+	/** La tempÃ©rature Ã  atteindre pour arreter le recuit. */
 	private double temperatureFinale = TEMPERATURE_FINALE;
-	/** La valeur de la meilleure solution trouvée. */
+	/** La valeur de la meilleure solution trouvÃ©e. */
 	protected double meilleureValeur;
 	/**
-	 * Le taux d'acceptation de solutions coûteuses acceptées par le recuit à la
-	 * température initiale.
+	 * Le taux d'acceptation de solutions couteuses acceptÃ©es par le recuit Ã  la
+	 * tempÃ©rature initiale.
 	 */
 	protected double probabiliteAcceptation;
 
-	/** Le nombre d'itérations par palier de température */
+	/** Le nombre d'itÃ©rations par palier de tempÃ©rature */
 	private int nbIterationsParPalier;
-	/** Le nombre d'itérations courant pour le palier de température courant. */
+	/** Le nombre d'itÃ©rations courant pour le palier de tempÃ©rature courant. */
 	private int iterationCourante;
 
 	public Solution calculSolution() {
@@ -60,10 +60,10 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Construit un recuit simulé.
+	 * Construit un recuit simulÃ©.
 	 * 
 	 * @param facteurDecroissance
-	 *            le facteur de décroissance de la température.
+	 *            le facteur de dÃ©croissance de la tempÃ©rature.
 	 */
 	public RecuitSimule(Data data, double facteurDecroissance,
 			double tauxAcceptation) {
@@ -78,10 +78,10 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Construit un recuit simulé.
+	 * Construit un recuit simulÃ©.
 	 * 
 	 * @param facteurDecroissance
-	 *            le facteur de décroissance de la température.
+	 *            le facteur de dÃ©croissance de la tempÃ©rature.
 	 */
 	public RecuitSimule(Data data) {
 		this.data = data;
@@ -128,8 +128,8 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Démarre le recuit simulé. Implémente le coeur de l'algorithme du recuit
-	 * simulé commun à tous les problèmes.
+	 * DÃ©marre le recuit simulÃ©. ImplÃ©mente le coeur de l'algorithme du recuit
+	 * simulÃ© commun Ã  tous les problÃ¨mes.
 	 */
 	public void lancer() {
 		Solution solutionVoisine;
@@ -143,9 +143,9 @@ public class RecuitSimule {
 			meilleureSolution = solutionCourante.clone();
 			test = testPlacement(algoPl, meilleureSolution);
 			// while (!testSolTrouver()) {
-			// Les paliers de température
+			// Les paliers de tempÃ©rature
 			while (testerCondition1()) {
-				// Les itérations par palier
+				// Les itÃ©rations par palier
 				while (testerCondition2()) {
 					// On cherche une solution dans le voisinage
 					solutionVoisine = voisin();
@@ -169,7 +169,7 @@ public class RecuitSimule {
 
 							// Si la solution voisine est meilleure que la
 							// meilleure
-							// trouvée pour le moment
+							// trouvÃ©e pour le moment
 							// Elle devient la meilleure solution
 							if (solutionCourante.fonctionObjectif() < meilleureValeur) {
 								meilleureValeur = solutionCourante
@@ -177,9 +177,9 @@ public class RecuitSimule {
 								meilleureSolution = solutionCourante.clone();
 							}
 						}
-						// Si la solution voisine n'améliore pas la solution
+						// Si la solution voisine n'amÃ©liore pas la solution
 						// courante
-						// Elle peut être accepté
+						// Elle peut Ãªtre acceptÃ©e
 						else {
 							double p = Math.random();
 							if (p <= Math.exp(-delta / temperature)) {
@@ -224,7 +224,7 @@ public class RecuitSimule {
 		Map<Integer, List<Bin>> m = reconstruireBin(listBins);
 		StringBuilder s = new StringBuilder();
 		for (int numPattern : m.keySet()) {
-			s.append("==================== Bins n°" + numPattern
+			s.append("==================== Bins nÂ°" + numPattern
 					+ "===============\n");
 			for (Bin b : m.get(numPattern)) {
 				s.append(b.toString() + "\n");
@@ -237,7 +237,7 @@ public class RecuitSimule {
 		System.out.println("--------------------------" + sol
 				+ "--------------------------");
 		StringBuilder qte = new StringBuilder();
-		qte.append("Quantité ==> ");
+		qte.append("QuantitÃ© ==> ");
 		for (Planche p : solutionCourante2.getPlanches()) {
 			StringBuilder s = new StringBuilder();
 			s.append("[");
@@ -254,14 +254,14 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Teste si le recuit est arrivé la température finale demandée à la
-	 * création.
+	 * Teste si le recuit est arrivÃ© la tempÃ©rature finale demandÃ©e Ã  la
+	 * crÃ©ation.
 	 * 
-	 * @return true si le recuit peut passer au palier de température suivant,
+	 * @return true si le recuit peut passer au palier de tempï¿½rature suivant,
 	 *         false sinon.
 	 */
 	protected boolean testerCondition1() {
-		System.out.println("Température : " + temperature);
+		System.out.println("TempÃ©rature : " + temperature);
 		if (temperature > temperatureFinale) {
 			return true;
 		} else {
@@ -272,7 +272,7 @@ public class RecuitSimule {
 	private boolean testSolTrouver() {
 		for (Planche p : meilleureSolution.getPlanches()) {
 			if (p.getQuantite() < 0) {
-				System.out.println("Pas de solution trouvée...On relance");
+				System.out.println("Pas de solution trouvÃ©e...On relance");
 				return false;
 			}
 		}
@@ -280,10 +280,10 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Teste si le recuit a encore des itérations à faire pour un palier de
-	 * température.
+	 * Teste si le recuit a encore des itÃ©rations Ã  faire pour un palier de
+	 * tempÃ©rature.
 	 * 
-	 * @return true si le recuit doit continuer à ce palier de température,
+	 * @return true si le recuit doit continuer Ã  ce palier de tempÃ©rature,
 	 *         false sinon.
 	 */
 	protected boolean testerCondition2() {
@@ -297,8 +297,8 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Initialise la température du recuit. La température initiale doit
-	 * accepter un certain nombre de solutions coûteuses. Ce taux est fixé par
+	 * Initialise la tempÃ©rature du recuit. La tempÃ©rature initiale doit
+	 * accepter un certain nombre de solutions couteuses. Ce taux est fixÃ© par
 	 * l'utilisateur.
 	 */
 	private void initialiserTemperature() {
@@ -308,7 +308,7 @@ public class RecuitSimule {
 		temperature = 1000;
 
 		// Tant que le taux d'acceptation n'est pas celui voulu
-		// On multiplie la température par 2
+		// On multiplie la tempÃ©rature par 2
 		do {
 			int nbCouteuses = 0;
 			int nbCouteusesAcceptees = 0;
@@ -318,8 +318,8 @@ public class RecuitSimule {
 				solutionVoisine = voisin();
 				boolean test = testPlacement(algoPl, solutionVoisine);
 				if (test) {
-					// Si on a une solution coûteuse, on regarde si elle est
-					// acceptée
+					// Si on a une solution couteuse, on regarde si elle est
+					// acceptÃ©e
 					if (solutionCourante.deltaF(solutionVoisine) >= 0) {
 						this.solutionCourante = solutionVoisine.clone();
 						double p = Math.random();
@@ -341,17 +341,17 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Décroit la température du recuit. La fonction utilisée est : f(t) = alpha
-	 * x t avec alpha fixée par l'utilisateur.
+	 * DÃ©croit la tempÃ©rature du recuit. La fonction utilisÃ©e est : f(t) = alpha
+	 * x t avec alpha fixÃ©e par l'utilisateur.
 	 */
 	private void decroitreTemperature() {
 		temperature *= facteurDecroissance;
 	}
 
 	/**
-	 * Sélectionne une solution dans le voisinage de la solution courante. Dans
-	 * notre cas, une solution voisine est une solution dont on décalle le
-	 * nombre d'image à l'image suivante et on ajoute 1 une des images.
+	 * SÃ©lectionne une solution dans le voisinage de la solution courante. Dans
+	 * notre cas, une solution voisine est une solution dont on dÃ©calle le
+	 * nombre d'image Ã  l'image suivante et on ajoute 1 une des images.
 	 * 
 	 * @return une solution voisine de la solution courante.
 	 */

@@ -48,7 +48,7 @@ public class FenetrePattern extends JFrame {
 	// }
 
 	private void initFrame() {
-		this.setTitle("Meilleur solution");
+		this.setTitle("Meilleure solution");
 		int hauteurFenetre = HAUTEUR_FENETRE;
 		int largeurFenetre;
 		double largeurBin = data.getPlanche().getDimension().getLargeur();
@@ -98,22 +98,22 @@ public class FenetrePattern extends JFrame {
 		patterns.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		add(patterns, BorderLayout.CENTER);
 
-		// Ajoute les libellés en bas
+		// Ajoute les libellÃ©s en bas
 		JPanel labels = new JPanel();
 		labels.setLayout(new GridLayout(3, nbPatterns));
 		labels.setBackground(Color.YELLOW);
 		labels.setBorder(BorderFactory.createLineBorder(Color.RED));
 		for (int i : bins.keySet()) {
-			JLabel numPattern = new JLabel("Pattern n°" + i);
+			JLabel numPattern = new JLabel("Pattern nÂ°" + i);
 			labels.add(numPattern);
 		}
 		for (int i : bins.keySet()) {
 			JLabel quantite;
 			if (solutionNotFind) {
 				quantite = new JLabel(
-						"Quantité impossible à calculer car des images ne sont pas placée");
+						"QuantitÃ© impossible Ã  calculer car des images ne sont pas placÃ©e");
 			} else {
-				quantite = new JLabel("Quantité : " + quantites.get(i));
+				quantite = new JLabel("QuantitÃ© : " + quantites.get(i));
 			}
 			labels.add(quantite);
 		}

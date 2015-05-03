@@ -8,15 +8,12 @@ import entites.Image;
 
 /**
  * Représente la disposition des images présentes sur une planche.
- * 
- * @author Jérémy
- *
  */
 public class Composition {
 	// Nombre de fois que l'image (avec l'indice du tableau) sera placé sur la
 	// planche
 	private int[] compoPlanche;
-	// Les images positionn�es sur la planche
+	// Les images positionnées sur la planche
 	private List<Image> imagesPositionnees;
 
 	public Composition(int nbImages) {
@@ -31,7 +28,7 @@ public class Composition {
 	}
 
 	/**
-	 * Initialise la composition. Par d�fault, on place au moins une fois toute
+	 * Initialise la composition. Par défaut, on place au moins une fois toute
 	 * les images
 	 * 
 	 * @param nbImages

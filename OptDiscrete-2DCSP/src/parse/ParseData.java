@@ -26,54 +26,51 @@ public class ParseData {
 	}
 
 	/**
-	 * Construit l'objet Data ‡ partir d'un fichier texte dont le chemin absolu
-	 * est passÈ en paramËtre. L'objet Data contient une liste d'images ‡ placer
-	 * triÈ de la plus grande ‡ la plus petite gr‚ce au tri fusion (trie le plus
-	 * efficace nlog(n)).
+	 * Construit l'objet Data √† partir d'un fichier texte dont le chemin absolu
+	 * est pass√© en param√®tre. L'objet Data contient une liste d'images √†
+	 * placer tri√© de la plus grande √† la plus petite gr√†ce au tri fusion
+	 * (trie le plus efficace nlog(n)).
 	 * 
 	 * @param path
 	 * @return
+	 * @throws IOException
 	 */
-	public Data buildData(String path) {
+	public Data buildData(String path) throws IOException {
 		Planche p = null;
 		List<Image> listImages = null;
 		Dimension dimPlanche = null;
 		double prixPlanche = 0;
-		try {
-			List<String> lines = Files.readAllLines(Paths.get(path),
-					StandardCharsets.UTF_8);
-			String ligne = lines.get(0);
-			lines.remove(0);
-			Double largeurPlanche = buildDimension(ligne);
-			ligne = lines.get(0);
-			lines.remove(0);
-			Double hauteurPlanche = buildDimension(ligne);
-			ligne = lines.get(0);
-			lines.remove(0);
-			prixPlanche = buildDimension(ligne);
+		List<String> lines = Files.readAllLines(Paths.get(path),
+				StandardCharsets.UTF_8);
+		String ligne = lines.get(0);
+		lines.remove(0);
+		Double largeurPlanche = buildDimension(ligne);
+		ligne = lines.get(0);
+		lines.remove(0);
+		Double hauteurPlanche = buildDimension(ligne);
+		ligne = lines.get(0);
+		lines.remove(0);
+		prixPlanche = buildDimension(ligne);
 
-			dimPlanche = new Dimension(largeurPlanche, hauteurPlanche);
+		dimPlanche = new Dimension(largeurPlanche, hauteurPlanche);
 
-			Image image = null;
-			Dimension dimImage = null;
-			Double largeurImage;
-			Double hauteurImage;
-			int quantiteImages;
-			listImages = new LinkedList<Image>();
-			int i = 0;
-			for (String line : lines) {
-				String[] lineElements = line.split("\t");
-				largeurImage = Double.parseDouble(lineElements[0]);
-				hauteurImage = Double.parseDouble(lineElements[1]);
-				quantiteImages = Integer.parseInt(lineElements[2]);
-				dimImage = new Dimension(largeurImage, hauteurImage);
-				image = new Image(i, dimImage, generateRandomColor(),
-						quantiteImages);
-				listImages.add(image);
-				i++;
-			}
-		} catch (IOException e) {
-			System.out.println("Unable to parse data");
+		Image image = null;
+		Dimension dimImage = null;
+		Double largeurImage;
+		Double hauteurImage;
+		int quantiteImages;
+		listImages = new LinkedList<Image>();
+		int i = 0;
+		for (String line : lines) {
+			String[] lineElements = line.split("\t");
+			largeurImage = Double.parseDouble(lineElements[0]);
+			hauteurImage = Double.parseDouble(lineElements[1]);
+			quantiteImages = Integer.parseInt(lineElements[2]);
+			dimImage = new Dimension(largeurImage, hauteurImage);
+			image = new Image(i, dimImage, generateRandomColor(),
+					quantiteImages);
+			listImages.add(image);
+			i++;
 		}
 		Image[] array = listImages.toArray(new Image[listImages.size()]);
 		trieImages(array);

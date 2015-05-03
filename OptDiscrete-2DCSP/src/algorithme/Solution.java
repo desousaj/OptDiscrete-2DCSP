@@ -89,8 +89,8 @@ public class Solution extends SolutionAbstract {
 	}
 
 	/**
-	 * Fonction qui met à jour le nombre de fois qu'il faut imprimer chaque
-	 * planche pour avoir toute les images. Si l'image est sur différent
+	 * Fonction qui met Ã  jour le nombre de fois qu'il faut imprimer chaque
+	 * planche pour avoir toute les images. Si l'image est sur diffÃ©rent
 	 * pattern, on augmente le pattern qui comporte le plus de fois cette image.
 	 */
 	private void simplex() {
@@ -107,7 +107,7 @@ public class Solution extends SolutionAbstract {
 		for (int k = 0; k < fctObjective.length; k++) {
 			fctObjective[k] = 1;
 		}
-		// Création des contraintes
+		// CrÃ©ation des contraintes
 		for (int j = 0; j < nbImages; j++) {
 			int i = 0;
 			for (Planche p : planches) {
