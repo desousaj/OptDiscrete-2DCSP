@@ -73,8 +73,16 @@ public class FenetreMenu extends JFrame implements ActionListener {
 			Data d;
 			try {
 				d = parseData.buildData(infosFichier.getText());
-				RecuitSimule rs = new RecuitSimule(d);
-				rs.lancer();
+				if (d.testIsPossible()) {
+					RecuitSimule rs = new RecuitSimule(d);
+					rs.lancer();
+				} else {
+					JOptionPane jop = new JOptionPane();
+					jop.showMessageDialog(
+							null,
+							"La taille des images est supérieur aux patterns disponibles.",
+							"Erreur", JOptionPane.ERROR_MESSAGE);
+				}
 			} catch (IOException e) {
 				System.out
 						.println("Unable to parse data. Veuillez selectionner un fichier valide...");

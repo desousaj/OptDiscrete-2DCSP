@@ -23,7 +23,7 @@ import entites.Planche;
 import execute.Execute;
 
 public class Solution extends SolutionAbstract {
-
+	int nbPlanche = Execute.NB_PATTERNS;
 	private List<Planche> planches;
 	private double prixTotal;
 	private Data data;
@@ -31,25 +31,66 @@ public class Solution extends SolutionAbstract {
 	public Solution(Data data) {
 		int nbImages = data.getNbImages();
 		this.data = data;
-		prixTotal = 0;
+		prixTotal = -1;
 		Planche p = data.getPlanche();
 		planches = new LinkedList<Planche>();
 
-		// Solution initiale, on met une image sur 2
-		int[] compoPlanche = new int[nbImages];
-		for (int i = 0; i < nbImages; i++) {
-			if (i % 10 == 0)
-				compoPlanche[i] = 1;
+		// for (int j = 0; j < nbPlanche; j++) {
+		// int[] compoPlanche = new int[nbImages];
+		// listCompo.add(compoPlanche);
+		// }
 
+		int cpt = 0;
+		int[] compo = new int[nbImages];
+		for (int indice = 0; indice < nbImages; indice++) {
+			if (cpt == 0) {
+				compo[indice] = 1;
+			}
+			if (cpt == nbPlanche - 1) {
+				cpt = 0;
+			} else {
+				cpt++;
+			}
 		}
 
-		Composition c = new Composition(nbImages);
-		c.setCompoPlanche(compoPlanche);
-		p.setComposition(c);
+		Composition c = new Composition(compo);
+		Planche pl = new Planche(data.getPlanche().getPrix(), data.getPlanche()
+				.getDimension(), 0, -1, c);
+		planches.add(pl);
 
-		for (int i = 0; i < Execute.NB_PATTERNS; i++) {
-			planches.add(p);
+		for (int k = 1; k < nbPlanche; k++) {
+			int[] compo2 = rotate(compo, k);
+			Composition c2 = new Composition(compo2);
+			Planche pl2 = new Planche(data.getPlanche().getPrix(), data
+					.getPlanche().getDimension(), 0, -1, c2);
+			planches.add(pl2);
 		}
+		for (Planche p6 : planches) {
+			System.out.println(p6.toString());
+		}
+
+	}
+
+	public Solution() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public int[] rotate(int[] arr, int order) {
+		int[] base = arr.clone();
+		if (arr == null || order < 0) {
+			throw new IllegalArgumentException("Illegal argument!");
+		}
+
+		for (int i = 0; i < order; i++) {
+			for (int j = arr.length - 1; j > 0; j--) {
+				int temp = arr[j];
+				arr[j] = arr[j - 1];
+				arr[j - 1] = temp;
+			}
+		}
+		int[] temp = arr.clone();
+		arr = base;
+		return temp;
 	}
 
 	public double getPrixTotal() {
@@ -180,7 +221,7 @@ public class Solution extends SolutionAbstract {
 
 	@Override
 	public Solution clone() {
-		Solution s = new Solution(this.data);
+		Solution s = new Solution();
 		List<Planche> listPlanches = new ArrayList<Planche>();
 		for (Planche p : planches) {
 			Planche p2 = p.clone();

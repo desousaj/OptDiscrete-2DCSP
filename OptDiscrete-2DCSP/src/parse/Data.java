@@ -5,6 +5,7 @@ import java.util.List;
 
 import entites.Image;
 import entites.Planche;
+import execute.Execute;
 
 public class Data {
 	private Planche planche;
@@ -58,6 +59,21 @@ public class Data {
 			txt = txt.concat(img.toString() + "\n");
 		}
 		return txt;
+	}
+
+	/**
+	 * Test si au moins chaque image peut être placé sur les patterns
+	 * 
+	 * @return
+	 */
+	public boolean testIsPossible() {
+		double airePatternsDispo = Execute.NB_PATTERNS
+				* planche.getDimension().calculeAire();
+		double aireImages = 0;
+		for (Image i : listImages) {
+			aireImages += i.calculAire();
+		}
+		return aireImages <= airePatternsDispo;
 	}
 
 }

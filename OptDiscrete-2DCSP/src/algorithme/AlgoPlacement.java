@@ -22,7 +22,8 @@ public class AlgoPlacement {
 	// Liste des bins pour la solution
 	private List<Bin> listBins = new ArrayList<Bin>();
 
-	// Map des bin de placement avec la clé correspondant à l'indice du premier
+	// Map des bin de placement avec la clé correspondant à l'indice du
+	// premier
 	// bin de chaque pattern.
 	private Map<Integer, List<Bin>> mapBins;
 
@@ -86,7 +87,8 @@ public class AlgoPlacement {
 			if (placementContinu) {
 				int indiceImage;
 				for (indiceImage = 0; indiceImage < composTotal.length; indiceImage++) {
-					// Si on a pas d'image a placer, on passe à l'indice suivant
+					// Si on a pas d'image a placer, on passe à l'indice
+					// suivant
 					// sinon on la place et on construit les 2 bins "fils"
 					if (composTotal[indiceImage] > 0) {
 						for (int nb = composTotal[indiceImage]; nb > 0; nb--) {
@@ -112,11 +114,6 @@ public class AlgoPlacement {
 					}
 				}
 			}
-			// if (placementContinu) {
-			// for (Bin b : binBases) {
-			// System.out.println(b.toString() + "\n");
-			// }
-			// }
 		} else {
 			System.err
 					.println("Le nombre d'argument est trop grand par rapport au nombre d'images disponibles");
@@ -145,7 +142,8 @@ public class AlgoPlacement {
 			if (placementContinu) {
 				int indiceImage;
 				for (indiceImage = 0; indiceImage < composTotal.length; indiceImage++) {
-					// Si on a pas d'image a placer, on passe à l'indice suivant
+					// Si on a pas d'image a placer, on passe à l'indice
+					// suivant
 					// sinon
 					// on la place et on construit les 2 bins "fils"
 					if (composTotal[indiceImage] > 0) {
@@ -219,8 +217,8 @@ public class AlgoPlacement {
 
 	/**
 	 * Associe l'image au 1er bin de base si c'est possible et découpe ce bin
-	 * pour construire ses 2 "fils". Si l'image ne pas être placée, alors il n'y
-	 * a pas de solution possible et on retourne null.
+	 * pour construire ses 2 "fils". Si l'image ne pas être placée, alors il
+	 * n'y a pas de solution possible et on retourne null.
 	 * 
 	 * @param binBases
 	 * @param img
@@ -262,12 +260,12 @@ public class AlgoPlacement {
 
 	/**
 	 * Fonction qui découpe le bin placé en paramètre selon la vertical ou
-	 * l'horizontal. Les deux bins "fils" sont créés et associés au bin passé en
-	 * paramètre. Le paramètre image correpsont à l'image à placer sur le bin
-	 * (en paramètre). Si l'image peut être placée selon les 2 découpes, on
-	 * privilégie la découpe qui créer les 2 bins avec les aires les plus
-	 * proches. La liste des bins est ensuite modifiée (on ajoute les bins fils
-	 * et on met le père à false).
+	 * l'horizontal. Les deux bins "fils" sont créés et associés au bin
+	 * passé en paramètre. Le paramètre image correpsont à l'image à placer
+	 * sur le bin (en paramètre). Si l'image peut être placée selon les 2
+	 * découpes, on privilégie la découpe qui créer les 2 bins avec les
+	 * aires les plus proches. La liste des bins est ensuite modifiée (on
+	 * ajoute les bins fils et on met le père à false).
 	 * 
 	 * @param bins
 	 * 
@@ -341,8 +339,8 @@ public class AlgoPlacement {
 	 * Retourne un entier qui indique si l'image peut être placé sur le bin
 	 * passé en paramètre. Plusieurs cas sont possibles : -1 impossible de
 	 * placer l'image, 0 l'image peut être placée telle qu'elle est, 1 l'image
-	 * peut être placée en la tournant, 2 les 2 cas possibles (limage peut être
-	 * placée dans les 2 sens)
+	 * peut être placée en la tournant, 2 les 2 cas possibles (limage peut
+	 * être placée dans les 2 sens)
 	 * 
 	 * @param bin
 	 * @param img

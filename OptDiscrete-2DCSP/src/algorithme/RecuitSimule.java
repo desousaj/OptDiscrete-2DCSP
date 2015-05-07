@@ -24,6 +24,8 @@ public class RecuitSimule {
 
 	protected Data data;
 
+	private AlgoPlacement algoPlacement;
+
 	/** La solution courante du recuit simulé. */
 	protected Solution solutionCourante;
 	/** La meilleure solution trouvée pour le moment. */
@@ -37,8 +39,8 @@ public class RecuitSimule {
 	/** La valeur de la meilleure solution trouvée. */
 	protected double meilleureValeur;
 	/**
-	 * Le taux d'acceptation de solutions couteuses acceptées par le recuit à la
-	 * température initiale.
+	 * Le taux d'acceptation de solutions couteuses acceptées par le recuit à
+	 * la température initiale.
 	 */
 	protected double probabiliteAcceptation;
 
@@ -74,7 +76,7 @@ public class RecuitSimule {
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
-
+		this.algoPlacement = new AlgoPlacement(data);
 	}
 
 	/**
@@ -91,14 +93,16 @@ public class RecuitSimule {
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
+		this.algoPlacement = new AlgoPlacement(data);
 	}
 
-	private boolean testPlacement(AlgoPlacement algoPl, Solution solutionVoisine) {
+	private boolean testPlacement(Solution solutionVoisine) {
 		boolean test = true;
 		List<Bin> bins = null;
 		int j = 0;
 		for (Planche p : solutionVoisine.getPlanches()) {
-			bins = algoPl.placementBis(p.getComposition().getCompoPlanche(), j);
+			bins = algoPlacement.placementBis(p.getComposition()
+					.getCompoPlanche(), j);
 			if (bins == null) {
 				test = false;
 				break;
@@ -108,14 +112,14 @@ public class RecuitSimule {
 		return test;
 	}
 
-	private Map<Integer, List<Bin>> buildPlacement(AlgoPlacement algoPl,
-			Solution solutionVoisine) {
+	private Map<Integer, List<Bin>> buildPlacement(Solution solutionVoisine) {
 		Map<Integer, List<Bin>> maps = new HashMap<Integer, List<Bin>>();
 		boolean test = true;
 		List<Bin> bins = null;
 		int j = 0;
 		for (Planche p : solutionVoisine.getPlanches()) {
-			bins = algoPl.placementBis(p.getComposition().getCompoPlanche(), j);
+			bins = algoPlacement.placementBis(p.getComposition()
+					.getCompoPlanche(), j);
 			if (bins == null) {
 				test = false;
 				break;
@@ -128,85 +132,73 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Démarre le recuit simulé. Implémente le coeur de l'algorithme du recuit
-	 * simulé commun à tous les problèmes.
+	 * Démarre le recuit simulé. Implémente le coeur de l'algorithme du
+	 * recuit simulé commun à tous les problèmes.
 	 */
 	public void lancer() {
 		Solution solutionVoisine;
 		double delta;
 		AlgoPlacement algoPl = new AlgoPlacement(data);
-		boolean test = testPlacement(algoPl, solutionCourante);
-		if (test) {
-			// Initilaisation du recuit
-			initialiserTemperature();
-			meilleureValeur = solutionCourante.fonctionObjectif();
-			meilleureSolution = solutionCourante.clone();
-			test = testPlacement(algoPl, meilleureSolution);
-			// while (!testSolTrouver()) {
-			// Les paliers de température
-			while (testerCondition1()) {
-				// Les itérations par palier
-				while (testerCondition2()) {
-					// On cherche une solution dans le voisinage
-					solutionVoisine = voisin();
+		// Initilaisation du recuit
+		// initialiserTemperature();
+		meilleureValeur = solutionCourante.fonctionObjectif();
+		meilleureSolution = solutionCourante.clone();
+		// Les paliers de température
+		while (testerCondition1()) {
+			// Les itérations par palier
+			while (testerCondition2()) {
+				// On cherche une solution dans le voisinage
+				solutionVoisine = voisin();
 
-					test = testPlacement(algoPl, solutionVoisine);
+				delta = solutionCourante.deltaF(solutionVoisine);
+				// afficherSolution(solutionVoisine, "Voisine");
+				// afficherSolution(solutionCourante, "Courante");
+				// System.out.println(meilleureSolution.getPrixTotal());
 
-					if (test) {
+				// Si la solution du voisinage est meilleure que la
+				// solution
+				// courante
+				if (delta <= 0) {
+					// La solution voisine devient la solution
+					// courante
+					solutionCourante = solutionVoisine.clone();
 
-						delta = solutionCourante.deltaF(solutionVoisine);
-						// afficherSolution(solutionVoisine, "Voisine");
-						// afficherSolution(solutionCourante, "Courante");
-						// System.out.println(meilleureSolution.getPrixTotal());
-
-						// Si la solution du voisinage est meilleure que la
-						// solution
-						// courante
-						if (delta <= 0) {
-							// La solution voisine devient la solution
-							// courante
-							solutionCourante = solutionVoisine.clone();
-
-							// Si la solution voisine est meilleure que la
-							// meilleure
-							// trouvée pour le moment
-							// Elle devient la meilleure solution
-							if (solutionCourante.fonctionObjectif() < meilleureValeur) {
-								meilleureValeur = solutionCourante
-										.fonctionObjectif();
-								meilleureSolution = solutionCourante.clone();
-							}
-						}
-						// Si la solution voisine n'améliore pas la solution
-						// courante
-						// Elle peut être acceptée
-						else {
-							double p = Math.random();
-							if (p <= Math.exp(-delta / temperature)) {
-								solutionCourante = solutionVoisine.clone();
-							}
-						}
+					// Si la solution voisine est meilleure que la
+					// meilleure
+					// trouvée pour le moment
+					// Elle devient la meilleure solution
+					if (solutionCourante.fonctionObjectif() < meilleureValeur) {
+						meilleureValeur = solutionCourante.fonctionObjectif();
+						meilleureSolution = solutionCourante.clone();
 					}
-					// afficherSolution(solutionCourante,
-					// "Solution courante");
 				}
-				decroitreTemperature();
+				// Si la solution voisine n'améliore pas la solution
+				// courante
+				// Elle peut être acceptée
+				else {
+					double p = Math.random();
+					if (p <= Math.exp(-delta / temperature)) {
+						solutionCourante = solutionVoisine.clone();
+					}
+				}
+				// afficherSolution(solutionCourante,
+				// "Solution courante");
 			}
-			// temperature = INIT_TEMP;
-			// }
-			afficherSolution(meilleureSolution, "Meilleur solution");
-			// afficherBins(algoPl.getListBins());
-			testPlacement(algoPl, meilleureSolution);
-			Map<Integer, List<Bin>> map = buildPlacement(algoPl,
-					meilleureSolution);
-			FenetrePattern f = new FenetrePattern(data, map,
-					meilleureSolution.quantites(),
-					meilleureSolution.getPrixTotal(),
-					meilleureSolution.getPlanches());
-			afficherBins(algoPl.getListBins());
-			afficherSolution(meilleureSolution, "Meilleur");
+			decroitreTemperature();
 		}
+		afficherSolution(meilleureSolution, "Meilleur solution");
+		// afficherBins(algoPl.getListBins());
+		// testPlacement(meilleureSolution);
+		Map<Integer, List<Bin>> map = buildPlacement(meilleureSolution);
+		FenetrePattern f = new FenetrePattern(data, map,
+				meilleureSolution.quantites(),
+				meilleureSolution.getPrixTotal(),
+				meilleureSolution.getPlanches());
+		afficherBins(algoPl.getListBins());
+		afficherSolution(meilleureSolution, "Meilleur");
 	}
+
+	// }
 
 	private Map<Integer, List<Bin>> reconstruireBin(List<Bin> listBins) {
 		Map<Integer, List<Bin>> map = new HashMap<Integer, List<Bin>>();
@@ -272,7 +264,7 @@ public class RecuitSimule {
 	private boolean testSolTrouver() {
 		for (Planche p : meilleureSolution.getPlanches()) {
 			if (p.getQuantite() < 0) {
-				System.out.println("Pas de solution trouvée...On relance");
+				System.out.println("Pas de solution trouv�e...On relance");
 				return false;
 			}
 		}
@@ -316,7 +308,7 @@ public class RecuitSimule {
 			// On fait 50 tirages de solutions voisines
 			for (int i = 0; i < 50; i++) {
 				solutionVoisine = voisin();
-				boolean test = testPlacement(algoPl, solutionVoisine);
+				boolean test = testPlacement(solutionVoisine);
 				if (test) {
 					// Si on a une solution couteuse, on regarde si elle est
 					// acceptée
@@ -341,8 +333,8 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Décroit la température du recuit. La fonction utilisée est : f(t) = alpha
-	 * x t avec alpha fixée par l'utilisateur.
+	 * Décroit la température du recuit. La fonction utilisée est : f(t) =
+	 * alpha x t avec alpha fixée par l'utilisateur.
 	 */
 	private void decroitreTemperature() {
 		temperature *= facteurDecroissance;
@@ -356,35 +348,67 @@ public class RecuitSimule {
 	 * @return une solution voisine de la solution courante.
 	 */
 	protected Solution voisin() {
-		Solution voisin = solutionCourante.clone();
-		List<Planche> lastPlanches = solutionCourante.getPlanches();
-		List<Planche> newsPlanches = new ArrayList<Planche>();
-		for (Planche p : lastPlanches) {
-			Random rand = new Random();
-			int[] compoPlanche = null;
-			compoPlanche = p.getComposition().getCompoPlanche();
-			int nombreAleatoire = rand.nextInt(compoPlanche.length);
-			int nombreAleatoire2 = rand.nextInt(compoPlanche.length);
-			int[] newCompo = new int[compoPlanche.length];
+		Solution voisin = null;
+		boolean test = false;
 
-			int premiereImageNb = compoPlanche[0];
-			for (int i = 0; i < compoPlanche.length - 1; i++) {
-				newCompo[i] = compoPlanche[i + 1];
+		while (!test) {
+			voisin = solutionCourante.clone();
+			List<Planche> lastPlanches = solutionCourante.getPlanches();
+			List<Planche> newsPlanches = new ArrayList<Planche>();
+			int nbImages = lastPlanches.get(0).getComposition()
+					.getCompoPlanche().length;
+
+			for (Planche p : lastPlanches) {
+				Random rand = new Random();
+				int[] compoPlanche = null;
+				compoPlanche = p.getComposition().getCompoPlanche();
+				int nombreAleatoire = rand.nextInt(compoPlanche.length);
+				int nombreAleatoire2 = rand.nextInt(compoPlanche.length);
+				int[] newCompo = new int[compoPlanche.length];
+
+				int premiereImageNb = compoPlanche[0];
+				for (int i = 0; i < compoPlanche.length - 1; i++) {
+					newCompo[i] = compoPlanche[i + 1];
+				}
+				newCompo[compoPlanche.length - 1] = premiereImageNb;
+				if (newCompo[nombreAleatoire] < data.getImage(nombreAleatoire)
+						.getQuantite()) {
+					newCompo[nombreAleatoire] += 1;
+				}
+				if (newCompo[nombreAleatoire2] > 1) {
+					newCompo[nombreAleatoire2] = 0;
+				}
+				Composition c = new Composition(newCompo);
+				Planche pl = new Planche(p.getPrix(), p.getDimension(),
+						p.getId(), p.getQuantite(), c);
+				newsPlanches.add(pl);
 			}
-			newCompo[compoPlanche.length - 1] = premiereImageNb;
-			if (newCompo[nombreAleatoire] < data.getImage(nombreAleatoire)
-					.getQuantite()) {
-				newCompo[nombreAleatoire] += 1;
+			// On regarde maintenant si toute les images sont plac�es au moins
+			// une
+			// fois sur n'importe quelle pattern
+			int[] imageQuantity = new int[lastPlanches.get(0).getComposition()
+					.getCompoPlanche().length];
+			for (Planche p : newsPlanches) {
+				for (int i = 0; i < nbImages; i++) {
+					imageQuantity[i] = imageQuantity[i]
+							+ p.getComposition().getCompoPlanche()[i];
+				}
 			}
-			if (newCompo[nombreAleatoire2] > 1) {
-				newCompo[nombreAleatoire2] = 1;
+			int cpt = 0;
+
+			for (int i = 0; i < nbImages; i++) {
+				if (imageQuantity[i] <= 0) {
+					newsPlanches.get(cpt).getComposition().getCompoPlanche()[i] = 1;
+				}
+				cpt++;
+				if (cpt % newsPlanches.size() == 0) {
+					cpt = 0;
+				}
 			}
-			Composition c = new Composition(newCompo);
-			Planche pl = new Planche(p.getPrix(), p.getDimension(), p.getId(),
-					p.getQuantite(), c);
-			newsPlanches.add(pl);
+
+			voisin.setPlanches(newsPlanches);
+			test = testPlacement(voisin);
 		}
-		voisin.setPlanches(newsPlanches);
 		return voisin;
 	};
 
