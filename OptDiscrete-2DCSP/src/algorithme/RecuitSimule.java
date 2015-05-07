@@ -73,6 +73,10 @@ public class RecuitSimule {
 		this.facteurDecroissance = facteurDecroissance;
 		this.probabiliteAcceptation = tauxAcceptation;
 		this.solutionCourante = new Solution(data);
+		/**
+		 * faire une fct initSol qui va faire toute les combinaisons de bases
+		 * possibles
+		 */
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
@@ -395,7 +399,6 @@ public class RecuitSimule {
 				}
 			}
 			int cpt = 0;
-
 			for (int i = 0; i < nbImages; i++) {
 				if (imageQuantity[i] <= 0) {
 					newsPlanches.get(cpt).getComposition().getCompoPlanche()[i] = 1;

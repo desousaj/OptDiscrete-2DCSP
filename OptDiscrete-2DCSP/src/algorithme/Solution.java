@@ -40,6 +40,7 @@ public class Solution extends SolutionAbstract {
 		// listCompo.add(compoPlanche);
 		// }
 
+		/* Début faire un constructeur de base avec toutes les images à 0 */
 		int cpt = 0;
 		int[] compo = new int[nbImages];
 		for (int indice = 0; indice < nbImages; indice++) {
@@ -68,6 +69,7 @@ public class Solution extends SolutionAbstract {
 		for (Planche p6 : planches) {
 			System.out.println(p6.toString());
 		}
+		/* Fin */
 
 	}
 
