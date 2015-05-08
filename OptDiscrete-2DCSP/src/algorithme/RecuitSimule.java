@@ -10,6 +10,7 @@ import parse.Data;
 import composition.Composition;
 import entites.Bin;
 import entites.Planche;
+import exception.MonException;
 import execute.Execute;
 import graphique.FenetrePattern;
 
@@ -18,7 +19,7 @@ public class RecuitSimule {
 	private static final int INIT_TEMP = 1000;
 	public static double FACTEUR_DECROISSANCE = 0.9;
 	public static double TAUX_ACCEPTATION = 0.8;
-	public static int NB_ITERATIONS_PAR_PALIER = 10000;
+	public static int NB_ITERATIONS_PAR_PALIER = 1000;
 	public static double TEMPERATURE_FINALE = 0.5;
 
 	protected Data data;
@@ -65,9 +66,10 @@ public class RecuitSimule {
 	 * 
 	 * @param facteurDecroissance
 	 *            le facteur de décroissance de la température.
+	 * @throws MonException 
 	 */
 	public RecuitSimule(Data data, double facteurDecroissance,
-			double tauxAcceptation) {
+			double tauxAcceptation) throws MonException {
 		this.data = data;
 		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = facteurDecroissance;
@@ -84,8 +86,9 @@ public class RecuitSimule {
 	 * 
 	 * @param facteurDecroissance
 	 *            le facteur de décroissance de la température.
+	 * @throws MonException 
 	 */
-	public RecuitSimule(Data data) {
+	public RecuitSimule(Data data) throws MonException {
 		this.data = data;
 		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = FACTEUR_DECROISSANCE;
@@ -97,14 +100,14 @@ public class RecuitSimule {
 		this.temperature = INIT_TEMP;
 	}
 	
-	public void initSolutionInitial(){
+	private void initSolutionInitial() throws MonException{
 		int[][] temp_sol = new int[Execute.NB_PATTERNS][this.data.getNbImages()];
 		int[] temp_compo;
 		int numRandomPattern;
 		Solution solution = new Solution(data);
 		Random rand = new Random();
 		
-		System.out.println("Search a initial solution...");
+		System.out.println("Searching a initial solution...");
 		
 		// Tente de trouver une solution initiale au maximum 2Milliards de fois
 		for (int n = 0; n < Integer.MAX_VALUE; n++){
@@ -137,7 +140,8 @@ public class RecuitSimule {
 		// Si le random n'a donne aucune possiblite reel
 		if (this.solutionCourante == null){
 			System.out.println("solution initial realisable non trouve -> derniere solution random");
-			this.solutionCourante = solution; //Met le dernier random dans la solution initial
+//			this.solutionCourante = solution; //Met le dernier random dans la solution initial
+			throw new MonException();
 		}
 		
 		//Affichage solution de base - Test - TODO delete this

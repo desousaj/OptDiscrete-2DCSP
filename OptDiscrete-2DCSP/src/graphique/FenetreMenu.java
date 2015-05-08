@@ -17,11 +17,12 @@ import javax.swing.JTextField;
 import parse.Data;
 import parse.ParseData;
 import algorithme.RecuitSimule;
+import exception.MonException;
 import execute.Execute;
 
 public class FenetreMenu extends JFrame implements ActionListener {
 
-	private JButton ouvrirFichier = new JButton("SÃ©lectionner un fichier");
+	private JButton ouvrirFichier = new JButton("Sélectionner un fichier");
 	private JTextField infosFichier = new JTextField("");
 	private JComboBox<String> comboNbPatterns;
 	private JLabel comboLabelPatterns = new JLabel("Nombre de Patterns");
@@ -92,6 +93,12 @@ public class FenetreMenu extends JFrame implements ActionListener {
 						null,
 						"Unable to parse data. Veuillez selectionner un fichier valide...",
 						"Erreur", JOptionPane.ERROR_MESSAGE);
+			} catch (MonException e) {
+				System.out.println("Unable to find an initial solution...");
+		// Boîte du message d'erreur
+		JOptionPane jop = new JOptionPane();
+		jop.showMessageDialog(null, "Unable to find an initial solution... :(",
+				"Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 
 		}
