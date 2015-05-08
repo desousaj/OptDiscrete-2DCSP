@@ -58,8 +58,12 @@ public class Composition {
 
 	@Override
 	public Composition clone() {
-		Composition c = new Composition(compoPlanche.length);
-		c.setCompoPlanche(compoPlanche);
+		Composition c = new Composition(this.compoPlanche.length);
+		int[] compo = new int[this.compoPlanche.length];
+		for (int i = 0; i < compo.length; i++){
+			compo[i] = this.compoPlanche[i];
+		}
+		c.setCompoPlanche(compo);
 		List<Image> images = new ArrayList<Image>();
 		if (imagesPositionnees != null && !imagesPositionnees.isEmpty()) {
 			for (Image i : imagesPositionnees) {

@@ -197,15 +197,14 @@ public class RecuitSimule {
 		// initialiserTemperature();
 		meilleureValeur = solutionCourante.fonctionObjectif();
 		meilleureSolution = solutionCourante.clone();
-		int testtest = 0;
-		// Les paliers de température
+
+		// Les paliers de temperature
 		while (testerCondition1()) {
 			// Les itérations par palier
 			while (testerCondition2()) {
 				// On cherche une solution dans le voisinage
 				solutionVoisine = voisin();
-				System.out.println(testtest);
-				testtest++;
+
 				delta = solutionCourante.deltaF(solutionVoisine);
 				// afficherSolution(solutionVoisine, "Voisine");
 				// afficherSolution(solutionCourante, "Courante");
@@ -415,7 +414,6 @@ public class RecuitSimule {
 		// Tant que le voisin n'est pas une solution realisable
 		while (!test) {
 			
-			// TODO corriger clone
 			voisin = this.solutionCourante.clone();
 			
 			// 1ere transformation : ajout d'une image dans un pattern
@@ -440,6 +438,16 @@ public class RecuitSimule {
 				}
 			}
 			test = testPlacement(voisin);
+			
+			//Affichage solution de base - Test - TODO delete this
+//			int i = 0;
+//			System.out.println("----------------");
+//			System.out.println(test);
+//			for (Planche p : voisin.getPlanches()){
+//				System.out.println("Planche " + i +
+//						"\n" +p.toString());
+//				i++;
+//			}
 		}
 		return voisin;
 	};
