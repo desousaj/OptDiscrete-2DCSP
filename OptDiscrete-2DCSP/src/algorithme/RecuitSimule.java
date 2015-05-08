@@ -102,13 +102,14 @@ public class RecuitSimule {
 		int[] temp_compo;
 		int numRandomPattern;
 		Solution solution = new Solution(data);
-		Random rand;
+		Random rand = new Random();
+		
+		System.out.println("Search a initial solution...");
 		
 		// Tente de trouver une solution initiale au maximum 2Milliards de fois
 		for (int n = 0; n < Integer.MAX_VALUE; n++){
 			// Prepare les valeurs d'une solution
 			for (int i = 0; i < this.data.getNbImages(); i++){
-				rand = new Random();
 				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS)); // donne un nb entre 0 et NB_PATTERNS-1
 				for (int j = 0; j < Execute.NB_PATTERNS; j++){
 					temp_sol[j][i] = numRandomPattern == j ? 1 : 0;
@@ -140,12 +141,12 @@ public class RecuitSimule {
 		}
 		
 		//Affichage solution de base - Test - TODO delete this
-//		int i = 0;
-//		for (Planche p : solution.getPlanches()){
-//			System.out.println("Planche " + i +
-//					"\n" +p.toString());
-//			i++;
-//		}
+		int i = 0;
+		for (Planche p : solution.getPlanches()){
+			System.out.println("Planche " + i +
+					"\n" +p.toString());
+			i++;
+		}
 		
 	}
 
@@ -196,13 +197,15 @@ public class RecuitSimule {
 		// initialiserTemperature();
 		meilleureValeur = solutionCourante.fonctionObjectif();
 		meilleureSolution = solutionCourante.clone();
+		int testtest = 0;
 		// Les paliers de température
 		while (testerCondition1()) {
 			// Les itérations par palier
 			while (testerCondition2()) {
 				// On cherche une solution dans le voisinage
 				solutionVoisine = voisin();
-
+				System.out.println(testtest);
+				testtest++;
 				delta = solutionCourante.deltaF(solutionVoisine);
 				// afficherSolution(solutionVoisine, "Voisine");
 				// afficherSolution(solutionCourante, "Courante");
@@ -404,61 +407,38 @@ public class RecuitSimule {
 		Solution voisin = null;
 		boolean test = false;
 
+		Random rand = new Random();
+		int pattern;
+		int image;
+		int cpt;
+		
+		// Tant que le voisin n'est pas une solution realisable
 		while (!test) {
-			voisin = solutionCourante.clone();
-			List<Planche> lastPlanches = solutionCourante.getPlanches();
-			List<Planche> newsPlanches = new ArrayList<Planche>();
-			int nbImages = lastPlanches.get(0).getComposition()
-					.getCompoPlanche().length;
-
-			for (Planche p : lastPlanches) {
-				Random rand = new Random();
-				int[] compoPlanche = null;
-				compoPlanche = p.getComposition().getCompoPlanche();
-				int nombreAleatoire = rand.nextInt(compoPlanche.length);
-				int nombreAleatoire2 = rand.nextInt(compoPlanche.length);
-				int[] newCompo = new int[compoPlanche.length];
-
-				int premiereImageNb = compoPlanche[0];
-				for (int i = 0; i < compoPlanche.length - 1; i++) {
-					newCompo[i] = compoPlanche[i + 1];
-				}
-				newCompo[compoPlanche.length - 1] = premiereImageNb;
-				if (newCompo[nombreAleatoire] < data.getImage(nombreAleatoire)
-						.getQuantite()) {
-					newCompo[nombreAleatoire] += 1;
-				}
-				if (newCompo[nombreAleatoire2] > 1) {
-					newCompo[nombreAleatoire2] = 0;
-				}
-				Composition c = new Composition(newCompo);
-				Planche pl = new Planche(p.getPrix(), p.getDimension(),
-						p.getId(), p.getQuantite(), c);
-				newsPlanches.add(pl);
+			
+			// TODO corriger clone
+			voisin = this.solutionCourante.clone();
+			
+			// 1ere transformation : ajout d'une image dans un pattern
+			pattern = rand.nextInt(Execute.NB_PATTERNS);
+			image = rand.nextInt(this.data.getNbImages());
+			voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] += 1;
+			
+			// 2eme transformation : suppresion d'une image dans un pattern
+			pattern = rand.nextInt(Execute.NB_PATTERNS);
+			image = rand.nextInt(this.data.getNbImages());
+			
+			cpt = 0;
+			// Recupere le nombre de fois que l'image est presente sur l'ensemble des patterns
+			for (Planche p : voisin.getPlanches()){
+				cpt += p.getComposition().getCompoPlanche()[image];
 			}
-			// On regarde maintenant si toute les images sont plac�es au moins
-			// une
-			// fois sur n'importe quelle pattern
-			int[] imageQuantity = new int[lastPlanches.get(0).getComposition()
-					.getCompoPlanche().length];
-			for (Planche p : newsPlanches) {
-				for (int i = 0; i < nbImages; i++) {
-					imageQuantity[i] = imageQuantity[i]
-							+ p.getComposition().getCompoPlanche()[i];
+			// Seulement si ce nombre est superieur a 1
+			if (cpt > 1){
+				// Si l'image n'est pas deja a 0 dans le pattern
+				if (voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] != 0){
+					voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] -= 1;
 				}
 			}
-			int cpt = 0;
-			for (int i = 0; i < nbImages; i++) {
-				if (imageQuantity[i] <= 0) {
-					newsPlanches.get(cpt).getComposition().getCompoPlanche()[i] = 1;
-				}
-				cpt++;
-				if (cpt % newsPlanches.size() == 0) {
-					cpt = 0;
-				}
-			}
-
-			voisin.setPlanches(newsPlanches);
 			test = testPlacement(voisin);
 		}
 		return voisin;

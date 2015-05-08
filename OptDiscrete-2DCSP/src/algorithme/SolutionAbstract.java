@@ -5,7 +5,7 @@ package algorithme;
  * 
  * 
  */
-public abstract class SolutionAbstract {
+public abstract class SolutionAbstract{
 
 	/**
 	 * Retourne la différence entre deux solutions. Une valeur négative si le

@@ -200,8 +200,9 @@ public class Solution extends SolutionAbstract {
 	public Solution clone() {
 		Solution s = new Solution(this.data);
 		List<Planche> listPlanches = new ArrayList<Planche>();
-		for (Planche p : planches) {
-			Planche p2 = p.clone();
+		Planche p2;
+		for (Planche p : this.planches) {
+			p2 = p.clone();
 			listPlanches.add(p2);
 		}
 		s.setPlanches(listPlanches);
