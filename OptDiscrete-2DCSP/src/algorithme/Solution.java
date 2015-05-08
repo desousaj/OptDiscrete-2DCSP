@@ -29,48 +29,23 @@ public class Solution extends SolutionAbstract {
 	private Data data;
 
 	public Solution(Data data) {
-		int nbImages = data.getNbImages();
 		this.data = data;
-		prixTotal = -1;
-		Planche p = data.getPlanche();
-		planches = new LinkedList<Planche>();
+		this.prixTotal = -1;
+		this.planches = new LinkedList<Planche>();
 
-		// for (int j = 0; j < nbPlanche; j++) {
-		// int[] compoPlanche = new int[nbImages];
-		// listCompo.add(compoPlanche);
-		// }
-
-		/* Début faire un constructeur de base avec toutes les images à 0 */
-		int cpt = 0;
-		int[] compo = new int[nbImages];
-		for (int indice = 0; indice < nbImages; indice++) {
-			if (cpt == 0) {
-				compo[indice] = 1;
-			}
-			if (cpt == nbPlanche - 1) {
-				cpt = 0;
-			} else {
-				cpt++;
-			}
+		// Initialise un tableau tout a 0
+		int[] compo = new int[this.data.getNbImages()];
+		for (int i = 0; i < compo.length; i++) {
+			compo[i] = 0;
 		}
-
+		
+		// Creer une compo avec le tableau tout a 0
 		Composition c = new Composition(compo);
-		Planche pl = new Planche(data.getPlanche().getPrix(), data.getPlanche()
-				.getDimension(), 0, -1, c);
-		planches.add(pl);
-
-		for (int k = 1; k < nbPlanche; k++) {
-			int[] compo2 = rotate(compo, k);
-			Composition c2 = new Composition(compo2);
-			Planche pl2 = new Planche(data.getPlanche().getPrix(), data
-					.getPlanche().getDimension(), 0, -1, c2);
-			planches.add(pl2);
+		
+		// Ajoute n Planche avec une compo tout a 0
+		for (int i = 0; i < nbPlanche; i++){
+			this.planches.add(new Planche(data.getPlanche().getPrix(), data.getPlanche().getDimension(), 0, -1, c));
 		}
-		for (Planche p6 : planches) {
-			System.out.println(p6.toString());
-		}
-		/* Fin */
-
 	}
 
 	public Solution() {
@@ -223,7 +198,7 @@ public class Solution extends SolutionAbstract {
 
 	@Override
 	public Solution clone() {
-		Solution s = new Solution();
+		Solution s = new Solution(this.data);
 		List<Planche> listPlanches = new ArrayList<Planche>();
 		for (Planche p : planches) {
 			Planche p2 = p.clone();

@@ -7,11 +7,10 @@ import java.util.Map;
 import java.util.Random;
 
 import parse.Data;
-
 import composition.Composition;
-
 import entites.Bin;
 import entites.Planche;
+import execute.Execute;
 import graphique.FenetrePattern;
 
 public class RecuitSimule {
@@ -70,17 +69,14 @@ public class RecuitSimule {
 	public RecuitSimule(Data data, double facteurDecroissance,
 			double tauxAcceptation) {
 		this.data = data;
+		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = facteurDecroissance;
 		this.probabiliteAcceptation = tauxAcceptation;
-		this.solutionCourante = new Solution(data);
-		/**
-		 * faire une fct initSol qui va faire toute les combinaisons de bases
-		 * possibles
-		 */
+//		this.solutionCourante = new Solution(data);
+		this.initSolutionInitial();
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
-		this.algoPlacement = new AlgoPlacement(data);
 	}
 
 	/**
@@ -91,13 +87,66 @@ public class RecuitSimule {
 	 */
 	public RecuitSimule(Data data) {
 		this.data = data;
+		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = FACTEUR_DECROISSANCE;
 		this.probabiliteAcceptation = TAUX_ACCEPTATION;
-		this.solutionCourante = new Solution(data);
+//		this.solutionCourante = new Solution(data);
+		this.initSolutionInitial();
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
-		this.algoPlacement = new AlgoPlacement(data);
+	}
+	
+	public void initSolutionInitial(){
+		int[][] temp_sol = new int[Execute.NB_PATTERNS][this.data.getNbImages()];
+		int[] temp_compo;
+		int numRandomPattern;
+		Solution solution = new Solution(data);
+		Random rand;
+		
+		// Tente de trouver une solution initiale au maximum 2Milliards de fois
+		for (int n = 0; n < Integer.MAX_VALUE; n++){
+			// Prepare les valeurs d'une solution
+			for (int i = 0; i < this.data.getNbImages(); i++){
+				rand = new Random();
+				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS)); // donne un nb entre 0 et NB_PATTERNS-1
+				for (int j = 0; j < Execute.NB_PATTERNS; j++){
+					temp_sol[j][i] = numRandomPattern == j ? 1 : 0;
+				}
+			}
+			
+			// Creer une solution avec les valeurs precedement trouve
+			solution = new Solution(data);
+			for (int i = 0; i < Execute.NB_PATTERNS; i++){
+				temp_compo = new int[this.data.getNbImages()];
+				for (int j = 0; j < this.data.getNbImages(); j++){
+					temp_compo[j] = temp_sol[i][j];
+				}
+				solution.getPlanches().get(i).setComposition(new Composition(temp_compo));
+			}
+			
+			// Verifie la possibilité de cette solution
+			if (this.testPlacement(solution)){
+				System.out.println("solution inital trouve");
+				this.solutionCourante = solution;
+				break;
+			}
+		}
+		
+		// Si le random n'a donne aucune possiblite reel
+		if (this.solutionCourante == null){
+			System.out.println("solution initial realisable non trouve -> derniere solution random");
+			this.solutionCourante = solution; //Met le dernier random dans la solution initial
+		}
+		
+		//Affichage solution de base - Test - TODO delete this
+//		int i = 0;
+//		for (Planche p : solution.getPlanches()){
+//			System.out.println("Planche " + i +
+//					"\n" +p.toString());
+//			i++;
+//		}
+		
 	}
 
 	private boolean testPlacement(Solution solutionVoisine) {
@@ -198,7 +247,7 @@ public class RecuitSimule {
 				meilleureSolution.quantites(),
 				meilleureSolution.getPrixTotal(),
 				meilleureSolution.getPlanches());
-		afficherBins(algoPl.getListBins());
+		afficherBins(this.algoPlacement.getListBins());
 		afficherSolution(meilleureSolution, "Meilleur");
 	}
 
@@ -257,7 +306,7 @@ public class RecuitSimule {
 	 *         false sinon.
 	 */
 	protected boolean testerCondition1() {
-		System.out.println("TempÃ©rature : " + temperature);
+		System.out.println("Temperature : " + temperature);
 		if (temperature > temperatureFinale) {
 			return true;
 		} else {
