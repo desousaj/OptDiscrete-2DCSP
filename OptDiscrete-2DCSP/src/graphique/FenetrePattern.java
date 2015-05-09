@@ -98,22 +98,22 @@ public class FenetrePattern extends JFrame {
 		patterns.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		add(patterns, BorderLayout.CENTER);
 
-		// Ajoute les libellés en bas
+		// Ajoute les libelles en bas
 		JPanel labels = new JPanel();
 		labels.setLayout(new GridLayout(3, nbPatterns));
 		labels.setBackground(Color.YELLOW);
 		labels.setBorder(BorderFactory.createLineBorder(Color.RED));
 		for (int i : bins.keySet()) {
-			JLabel numPattern = new JLabel("Pattern n°" + i);
+			JLabel numPattern = new JLabel("Pattern n�" + i);
 			labels.add(numPattern);
 		}
 		for (int i : bins.keySet()) {
 			JLabel quantite;
 			if (solutionNotFind) {
 				quantite = new JLabel(
-						"Quantité impossible à calculer car des images ne sont pas placée");
+						"Quantite impossible � calculer car des images ne sont pas placee");
 			} else {
-				quantite = new JLabel("Quantité : " + quantites.get(i));
+				quantite = new JLabel("Quantite : " + quantites.get(i));
 			}
 			labels.add(quantite);
 		}

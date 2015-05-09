@@ -85,7 +85,7 @@ public class Image {
 		if (couleur != null) {
 			txt = txt.concat("\t Couleur :" + couleur.toString() + "\n");
 		}
-		txt = txt.concat("\t Quantité :" + quantite + "\n");
+		txt = txt.concat("\t Quantite :" + quantite + "\n");
 		if (coordonnees != null) {
 			txt = txt.concat("\t" + coordonnees.toString());
 		}

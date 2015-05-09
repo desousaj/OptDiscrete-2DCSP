@@ -27,8 +27,8 @@ public class ParseData {
 
 	/**
 	 * Construit l'objet Data à partir d'un fichier texte dont le chemin absolu
-	 * est passé en paramètre. L'objet Data contient une liste d'images à
-	 * placer trié de la plus grande à la plus petite gràce au tri fusion
+	 * est passe en parametre. L'objet Data contient une liste d'images à
+	 * placer trie de la plus grande à la plus petite gràce au tri fusion
 	 * (trie le plus efficace nlog(n)).
 	 * 
 	 * @param path
@@ -106,12 +106,12 @@ public class ParseData {
 		// tab.clone est tres gourmand en temps d'execution surtout dans un algo
 		// recursif
 		// il faudrait passer par un tableau temporaire pour stocker les
-		// données
-		// triées.
-		// puis recopier la partie triée a la fin de la méthode.
+		// donnees
+		// triees.
+		// puis recopier la partie triee a la fin de la methode.
 
-		int i1 = debut; // indice dans la première moitié de old_tab
-		int i2 = milieu + 1; // indice dans la deuxième moitié de old_tab
+		int i1 = debut; // indice dans la premiere moitie de old_tab
+		int i2 = milieu + 1; // indice dans la deuxieme moitie de old_tab
 		int i = debut; // indice dans le tableau tab
 
 		while (i1 <= milieu && i2 <= fin) {
@@ -129,13 +129,13 @@ public class ParseData {
 			i++;
 		}
 		if (i <= fin) {
-			while (i1 <= milieu) // le reste de la première moitié
+			while (i1 <= milieu) // le reste de la premiere moitie
 			{
 				tab[i] = old_tab[i1];
 				i1++;
 				i++;
 			}
-			while (i2 <= fin) // le reste de la deuxième moitié
+			while (i2 <= fin) // le reste de la deuxieme moitie
 			{
 				tab[i] = old_tab[i2];
 				i2++;

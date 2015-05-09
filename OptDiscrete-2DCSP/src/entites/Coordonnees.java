@@ -34,7 +34,7 @@ public class Coordonnees implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Coordonnées : x=" + abscisse + " et y=" + ordonnee + "\n";
+		return "Coordonnees : x=" + abscisse + " et y=" + ordonnee + "\n";
 	}
 
 }

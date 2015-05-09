@@ -7,13 +7,13 @@ import java.util.List;
 import entites.Image;
 
 /**
- * Représente la disposition des images présentes sur une planche.
+ * Represente la disposition des images presentes sur une planche.
  */
 public class Composition {
-	// Nombre de fois que l'image (avec l'indice du tableau) sera placé sur la
+	// Nombre de fois que l'image (avec l'indice du tableau) sera place sur la
 	// planche
 	private int[] compoPlanche;
-	// Les images positionnées sur la planche
+	// Les images positionnees sur la planche
 	private List<Image> imagesPositionnees;
 
 	public Composition(int nbImages) {
@@ -28,7 +28,7 @@ public class Composition {
 	}
 
 	/**
-	 * Initialise la composition. Par défaut, on place au moins une fois toute
+	 * Initialise la composition. Par defaut, on place au moins une fois toute
 	 * les images
 	 * 
 	 * @param nbImages

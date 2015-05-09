@@ -5,18 +5,18 @@ public class Bin {
 	public static int NB_BIN = 0;
 	// Bin est possible
 	private boolean isOk;
-	// Numéro du bin
+	// Numero du bin
 	private int idBin;
 	// Dimension de ce bin
 	private Dimension dimension;
-	// Numéro du pattern correspondant
+	// Numero du pattern correspondant
 	private int numPatern;
-	// Coordonnées de ce bin sur son père. La coordonnée (0,0) correspond au bin
+	// Coordonnees de ce bin sur son pere. La coordonnee (0,0) correspond au bin
 	// de base.
 	private Coordonnees coordonnees;
-	// 1er Bin après la découpe
+	// 1er Bin apres la decoupe
 	private int idBin1;
-	// 2eme Bin après la découpe
+	// 2eme Bin apres la decoupe
 	private int idBin2;
 
 	private int idImage;
