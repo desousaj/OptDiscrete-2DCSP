@@ -3,9 +3,9 @@ package parse;
 import java.util.LinkedList;
 import java.util.List;
 
+import stats.Execute;
 import entites.Image;
 import entites.Planche;
-import execute.Execute;
 
 public class Data {
 	private Planche planche;

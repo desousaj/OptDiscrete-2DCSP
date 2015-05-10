@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import parse.Data;
+import stats.Execute;
 import entites.Bin;
 import entites.Coordonnees;
 import entites.Dimension;
 import entites.Image;
-import execute.Execute;
 
 public class AlgoPlacement {
 	private static final int EN_TOURNANT = 1;

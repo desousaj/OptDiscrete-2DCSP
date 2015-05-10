@@ -92,7 +92,7 @@ public class FenetrePattern extends JFrame {
 		patterns.setLayout(new GridLayout(1, nbPatterns));
 		for (int i : bins.keySet()) {
 			patterns.add(new PanelPattern(bins.get(i), data));
-			System.out.println(bins.get(i));
+			// System.out.println(bins.get(i));
 		}
 		// patterns.setBackground(Color.BLUE);
 		patterns.setBorder(BorderFactory.createLineBorder(Color.GREEN));

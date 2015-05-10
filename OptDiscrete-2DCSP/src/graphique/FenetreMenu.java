@@ -16,9 +16,9 @@ import javax.swing.JTextField;
 
 import parse.Data;
 import parse.ParseData;
+import stats.Execute;
 import algorithme.RecuitSimule;
 import exception.MonException;
-import execute.Execute;
 
 public class FenetreMenu extends JFrame implements ActionListener {
 
@@ -76,7 +76,12 @@ public class FenetreMenu extends JFrame implements ActionListener {
 				d = parseData.buildData(infosFichier.getText());
 				if (d.testIsPossible()) {
 					RecuitSimule rs = new RecuitSimule(d);
+					long tempsDebut = System.currentTimeMillis();
 					rs.lancer();
+					long tempsFin = System.currentTimeMillis();
+					float seconds = (tempsFin - tempsDebut) / 1000F;
+					System.out.println("Opération effectuée en: "
+							+ Float.toString(seconds) + " secondes.");
 				} else {
 					JOptionPane jop = new JOptionPane();
 					jop.showMessageDialog(
@@ -95,10 +100,11 @@ public class FenetreMenu extends JFrame implements ActionListener {
 						"Erreur", JOptionPane.ERROR_MESSAGE);
 			} catch (MonException e) {
 				System.out.println("Unable to find an initial solution...");
-		// Boîte du message d'erreur
-		JOptionPane jop = new JOptionPane();
-		jop.showMessageDialog(null, "Unable to find an initial solution... :(",
-				"Erreur", JOptionPane.ERROR_MESSAGE);
+				// Boîte du message d'erreur
+				JOptionPane jop = new JOptionPane();
+				jop.showMessageDialog(null,
+						"Unable to find an initial solution... :(", "Erreur",
+						JOptionPane.ERROR_MESSAGE);
 			}
 
 		}

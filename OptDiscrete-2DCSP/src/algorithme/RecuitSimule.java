@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.Random;
 
 import parse.Data;
+import stats.Execute;
 import composition.Composition;
 import entites.Bin;
 import entites.Planche;
 import exception.MonException;
-import execute.Execute;
 import graphique.FenetrePattern;
 
 public class RecuitSimule {
 
-	private static final int INIT_TEMP = 1000;
+	public static final int INIT_TEMP = 1000;
 	public static double FACTEUR_DECROISSANCE = 0.9;
-	public static double TAUX_ACCEPTATION = 0.8;
 	public static int NB_ITERATIONS_PAR_PALIER = 1000;
 	public static double TEMPERATURE_FINALE = 0.5;
 
@@ -32,6 +31,31 @@ public class RecuitSimule {
 	protected Solution meilleureSolution;
 	/** Le facteur de decroissance de la temperature du recuit. */
 	protected double facteurDecroissance;
+
+	public double getFacteurDecroissance() {
+		return facteurDecroissance;
+	}
+
+	public void setFacteurDecroissance(double facteurDecroissance) {
+		this.facteurDecroissance = facteurDecroissance;
+	}
+
+	public double getTemperatureFinale() {
+		return temperatureFinale;
+	}
+
+	public void setTemperatureFinale(double temperatureFinale) {
+		this.temperatureFinale = temperatureFinale;
+	}
+
+	public int getNbIterationsParPalier() {
+		return nbIterationsParPalier;
+	}
+
+	public void setNbIterationsParPalier(int nbIterationsParPalier) {
+		this.nbIterationsParPalier = nbIterationsParPalier;
+	}
+
 	/** La temperature du recuit. */
 	protected double temperature;
 	/** La temperature à atteindre pour arreter le recuit. */
@@ -42,7 +66,7 @@ public class RecuitSimule {
 	 * Le taux d'acceptation de solutions couteuses acceptees par le recuit à
 	 * la temperature initiale.
 	 */
-	protected double probabiliteAcceptation;
+	// protected double probabiliteAcceptation;
 
 	/** Le nombre d'iterations par palier de temperature */
 	private int nbIterationsParPalier;
@@ -66,15 +90,14 @@ public class RecuitSimule {
 	 * 
 	 * @param facteurDecroissance
 	 *            le facteur de decroissance de la temperature.
-	 * @throws MonException 
+	 * @throws MonException
 	 */
 	public RecuitSimule(Data data, double facteurDecroissance,
 			double tauxAcceptation) throws MonException {
 		this.data = data;
 		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = facteurDecroissance;
-		this.probabiliteAcceptation = tauxAcceptation;
-//		this.solutionCourante = new Solution(data);
+		// this.solutionCourante = new Solution(data);
 		this.initSolutionInitial();
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
@@ -86,71 +109,92 @@ public class RecuitSimule {
 	 * 
 	 * @param facteurDecroissance
 	 *            le facteur de decroissance de la temperature.
-	 * @throws MonException 
+	 * @throws MonException
+	 */
+	public RecuitSimule(Data data, double tempFinale, double tempInitiale,
+			int nbIteration, double factDecr) throws MonException {
+		this.data = data;
+		this.algoPlacement = new AlgoPlacement(data);
+		this.facteurDecroissance = factDecr;
+		this.initSolutionInitial();
+		this.nbIterationsParPalier = nbIteration;
+		this.temperatureFinale = tempFinale;
+		this.temperature = tempInitiale;
+	}
+
+	/**
+	 * Construit un recuit simule.
+	 * 
+	 * @param facteurDecroissance
+	 *            le facteur de decroissance de la temperature.
+	 * @throws MonException
 	 */
 	public RecuitSimule(Data data) throws MonException {
 		this.data = data;
 		this.algoPlacement = new AlgoPlacement(data);
 		this.facteurDecroissance = FACTEUR_DECROISSANCE;
-		this.probabiliteAcceptation = TAUX_ACCEPTATION;
-//		this.solutionCourante = new Solution(data);
+		// this.solutionCourante = new Solution(data);
 		this.initSolutionInitial();
 		this.nbIterationsParPalier = NB_ITERATIONS_PAR_PALIER;
 		this.temperatureFinale = TEMPERATURE_FINALE;
 		this.temperature = INIT_TEMP;
 	}
-	
-	private void initSolutionInitial() throws MonException{
+
+	private void initSolutionInitial() throws MonException {
 		int[][] temp_sol = new int[Execute.NB_PATTERNS][this.data.getNbImages()];
 		int[] temp_compo;
 		int numRandomPattern;
 		Solution solution = new Solution(data);
 		Random rand = new Random();
-		
+
 		System.out.println("Searching an initial solution... Wait for it...");
-		
+
 		// Tente de trouver une solution initiale au maximum 2Milliards de fois
-		for (int n = 0; n < Integer.MAX_VALUE; n++){
+		for (int n = 0; n < Integer.MAX_VALUE; n++) {
 			// Prepare les valeurs d'une solution
-			for (int i = 0; i < this.data.getNbImages(); i++){
-				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS)); // donne un nb entre 0 et NB_PATTERNS-1
-				for (int j = 0; j < Execute.NB_PATTERNS; j++){
+			for (int i = 0; i < this.data.getNbImages(); i++) {
+				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS)); // donne
+																		// un nb
+																		// entre
+																		// 0 et
+																		// NB_PATTERNS-1
+				for (int j = 0; j < Execute.NB_PATTERNS; j++) {
 					temp_sol[j][i] = numRandomPattern == j ? 1 : 0;
 				}
 			}
-			
+
 			// Creer une solution avec les valeurs precedement trouve
 			solution = new Solution(data);
-			for (int i = 0; i < Execute.NB_PATTERNS; i++){
+			for (int i = 0; i < Execute.NB_PATTERNS; i++) {
 				temp_compo = new int[this.data.getNbImages()];
-				for (int j = 0; j < this.data.getNbImages(); j++){
+				for (int j = 0; j < this.data.getNbImages(); j++) {
 					temp_compo[j] = temp_sol[i][j];
 				}
-				solution.getPlanches().get(i).setComposition(new Composition(temp_compo));
+				solution.getPlanches().get(i)
+						.setComposition(new Composition(temp_compo));
 			}
-			
+
 			// Verifie la possibilit� de cette solution
-			if (this.testPlacement(solution)){
+			if (this.testPlacement(solution)) {
 				System.out.println("Initial solution found");
 				this.solutionCourante = solution;
 				break;
 			}
 		}
-		
+
 		// Si le random n'a donne aucune possiblite reel
-		if (this.solutionCourante == null){
+		if (this.solutionCourante == null) {
 			System.out.println("Initial solution was not found... Abord");
 			throw new MonException();
 		}
-		
-		//Affichage solution de base - Test - TODO delete this
-		int i = 0;
-		for (Planche p : solution.getPlanches()){
-			System.out.println("Planche " + i +
-					"\n" +p.toString());
-			i++;
-		}
-		
+
+		// Affichage solution de base - Test - TODO delete this
+		// int i = 0;
+		// for (Planche p : solution.getPlanches()) {
+		// System.out.println("Planche " + i + "\n" + p.toString());
+		// i++;
+		// }
+
 	}
 
 	private boolean testPlacement(Solution solutionVoisine) {
@@ -189,8 +233,8 @@ public class RecuitSimule {
 	}
 
 	/**
-	 * Demarre le recuit simule. Implemente le coeur de l'algorithme du
-	 * recuit simule commun à tous les problemes.
+	 * Demarre le recuit simule. Implemente le coeur de l'algorithme du recuit
+	 * simule commun à tous les problemes.
 	 */
 	public void lancer() {
 		Solution solutionVoisine;
@@ -244,7 +288,7 @@ public class RecuitSimule {
 			}
 			decroitreTemperature();
 		}
-		afficherSolution(meilleureSolution, "Meilleur solution");
+		// afficherSolution(meilleureSolution, "Meilleur solution");
 		// afficherBins(algoPl.getListBins());
 		// testPlacement(meilleureSolution);
 		Map<Integer, List<Bin>> map = buildPlacement(meilleureSolution);
@@ -252,8 +296,8 @@ public class RecuitSimule {
 				meilleureSolution.quantites(),
 				meilleureSolution.getPrixTotal(),
 				meilleureSolution.getPlanches());
-		afficherBins(this.algoPlacement.getListBins());
-		afficherSolution(meilleureSolution, "Meilleur");
+		// afficherBins(this.algoPlacement.getListBins());
+		// afficherSolution(meilleureSolution, "Meilleur");
 	}
 
 	// }
@@ -311,7 +355,7 @@ public class RecuitSimule {
 	 *         false sinon.
 	 */
 	protected boolean testerCondition1() {
-		System.out.println("Temperature : " + temperature);
+		// System.out.println("Temperature : " + temperature);
 		if (temperature > temperatureFinale) {
 			return true;
 		} else {
@@ -351,48 +395,48 @@ public class RecuitSimule {
 	 * accepter un certain nombre de solutions couteuses. Ce taux est fixe par
 	 * l'utilisateur.
 	 */
-	private void initialiserTemperature() {
-		Solution solutionVoisine;
-		AlgoPlacement algoPl = new AlgoPlacement(data);
-		double taux = 0;
-		temperature = 1000;
-
-		// Tant que le taux d'acceptation n'est pas celui voulu
-		// On multiplie la temperature par 2
-		do {
-			int nbCouteuses = 0;
-			int nbCouteusesAcceptees = 0;
-
-			// On fait 50 tirages de solutions voisines
-			for (int i = 0; i < 50; i++) {
-				solutionVoisine = voisin();
-				boolean test = testPlacement(solutionVoisine);
-				if (test) {
-					// Si on a une solution couteuse, on regarde si elle est
-					// acceptee
-					if (solutionCourante.deltaF(solutionVoisine) >= 0) {
-						this.solutionCourante = solutionVoisine.clone();
-						double p = Math.random();
-						nbCouteuses++;
-
-						if (p <= Math.exp(-solutionCourante
-								.deltaF(solutionVoisine) / temperature)) {
-							nbCouteusesAcceptees++;
-						}
-					}
-				}
-			}
-
-			taux = (double) nbCouteusesAcceptees / (double) nbCouteuses;
-			if (taux < probabiliteAcceptation) {
-				temperature *= 2;
-			}
-		} while (taux < probabiliteAcceptation);
-	}
+	// private void initialiserTemperature() {
+	// Solution solutionVoisine;
+	// AlgoPlacement algoPl = new AlgoPlacement(data);
+	// double taux = 0;
+	// temperature = 1000;
+	//
+	// // Tant que le taux d'acceptation n'est pas celui voulu
+	// // On multiplie la temperature par 2
+	// do {
+	// int nbCouteuses = 0;
+	// int nbCouteusesAcceptees = 0;
+	//
+	// // On fait 50 tirages de solutions voisines
+	// for (int i = 0; i < 50; i++) {
+	// solutionVoisine = voisin();
+	// boolean test = testPlacement(solutionVoisine);
+	// if (test) {
+	// // Si on a une solution couteuse, on regarde si elle est
+	// // acceptee
+	// if (solutionCourante.deltaF(solutionVoisine) >= 0) {
+	// this.solutionCourante = solutionVoisine.clone();
+	// double p = Math.random();
+	// nbCouteuses++;
+	//
+	// if (p <= Math.exp(-solutionCourante
+	// .deltaF(solutionVoisine) / temperature)) {
+	// nbCouteusesAcceptees++;
+	// }
+	// }
+	// }
+	// }
+	//
+	// taux = (double) nbCouteusesAcceptees / (double) nbCouteuses;
+	// if (taux < probabiliteAcceptation) {
+	// temperature *= 2;
+	// }
+	// } while (taux < probabiliteAcceptation);
+	// }
 
 	/**
-	 * Decroit la temperature du recuit. La fonction utilisee est : f(t) =
-	 * alpha x t avec alpha fixee par l'utilisateur.
+	 * Decroit la temperature du recuit. La fonction utilisee est : f(t) = alpha
+	 * x t avec alpha fixee par l'utilisateur.
 	 */
 	private void decroitreTemperature() {
 		temperature *= facteurDecroissance;
@@ -413,44 +457,48 @@ public class RecuitSimule {
 		int pattern;
 		int image;
 		int cpt;
-		
+
 		// Tant que le voisin n'est pas une solution realisable
 		while (!test) {
-			
+
 			voisin = this.solutionCourante.clone();
-			
+
 			// 1ere transformation : ajout d'une image dans un pattern
 			pattern = rand.nextInt(Execute.NB_PATTERNS);
 			image = rand.nextInt(this.data.getNbImages());
-			voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] += 1;
-			
+			voisin.getPlanches().get(pattern).getComposition()
+					.getCompoPlanche()[image] += 1;
+
 			// 2eme transformation : suppresion d'une image dans un pattern
 			pattern = rand.nextInt(Execute.NB_PATTERNS);
 			image = rand.nextInt(this.data.getNbImages());
-			
+
 			cpt = 0;
-			// Recupere le nombre de fois que l'image est presente sur l'ensemble des patterns
-			for (Planche p : voisin.getPlanches()){
+			// Recupere le nombre de fois que l'image est presente sur
+			// l'ensemble des patterns
+			for (Planche p : voisin.getPlanches()) {
 				cpt += p.getComposition().getCompoPlanche()[image];
 			}
 			// Seulement si ce nombre est superieur a 1
-			if (cpt > 1){
+			if (cpt > 1) {
 				// Si l'image n'est pas deja a 0 dans le pattern
-				if (voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] != 0){
-					voisin.getPlanches().get(pattern).getComposition().getCompoPlanche()[image] -= 1;
+				if (voisin.getPlanches().get(pattern).getComposition()
+						.getCompoPlanche()[image] != 0) {
+					voisin.getPlanches().get(pattern).getComposition()
+							.getCompoPlanche()[image] -= 1;
 				}
 			}
 			test = testPlacement(voisin);
-			
-			//Affichage solution de base - Test - TODO delete this
-//			int i = 0;
-//			System.out.println("----------------");
-//			System.out.println(test);
-//			for (Planche p : voisin.getPlanches()){
-//				System.out.println("Planche " + i +
-//						"\n" +p.toString());
-//				i++;
-//			}
+
+			// Affichage solution de base - Test - TODO delete this
+			// int i = 0;
+			// System.out.println("----------------");
+			// System.out.println(test);
+			// for (Planche p : voisin.getPlanches()){
+			// System.out.println("Planche " + i +
+			// "\n" +p.toString());
+			// i++;
+			// }
 		}
 		return voisin;
 	};

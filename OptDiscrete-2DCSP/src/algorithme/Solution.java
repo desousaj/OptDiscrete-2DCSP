@@ -16,11 +16,9 @@ import org.apache.commons.math3.optim.linear.SimplexSolver;
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 
 import parse.Data;
-
+import stats.Execute;
 import composition.Composition;
-
 import entites.Planche;
-import execute.Execute;
 
 public class Solution extends SolutionAbstract {
 	int nbPlanche = Execute.NB_PATTERNS;
