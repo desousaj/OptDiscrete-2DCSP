@@ -1,46 +1,60 @@
 package graphique;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import parse.Data;
-import parse.ParseData;
 import stats.Execute;
-import algorithme.RecuitSimule;
-import exception.MonException;
 
 public class FenetreMenu extends JFrame implements ActionListener {
 
 	private JButton ouvrirFichier = new JButton("Sélectionner un fichier");
 	private JTextField infosFichier = new JTextField("");
 	private JComboBox<String> comboNbPatterns;
+	private JComboBox<String> comboNbThreads;
 	private JLabel comboLabelPatterns = new JLabel("Nombre de Patterns");
 	private JButton lancerSimu = new JButton("Lancer la simulation");
+	private JCheckBox multiThread;
+	JLabel multiThreadLabel = new JLabel("Multi-Thread : ");
 
 	public FenetreMenu() {
 		this.setTitle("2D Cutting Stock Problem with Setup Cost");
-		this.setSize(400, 200);
+		this.setSize(500, 200);
+		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panNbPatterns = new JPanel();
 		String[] tabNbPatterns = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
 				"10" };
+		String[] tabNbThread = { "2", "3", "4", "5" };
 		comboNbPatterns = new JComboBox<String>(tabNbPatterns);
+		comboNbThreads = new JComboBox<String>(tabNbThread);
+
+		multiThread = new JCheckBox();
 		panNbPatterns.add(comboLabelPatterns);
 		panNbPatterns.add(comboNbPatterns);
+
+		// Ajout des multi-thread
+		JPanel multiThreadPanel = new JPanel();
+		multiThreadPanel.setLayout(new GridLayout(1, 5));
+		multiThreadPanel.add(multiThreadLabel);
+		multiThreadPanel.add(multiThread);
+		multiThreadPanel.add(comboNbThreads);
+		panNbPatterns.add(multiThreadPanel);
 		this.add(panNbPatterns, BorderLayout.NORTH);
+		addActionListenerMultiThread();
+		comboNbThreads.hide();
 
 		ouvrirFichier.addActionListener(this);
 		JPanel panelFichier = new JPanel();
@@ -58,6 +72,22 @@ public class FenetreMenu extends JFrame implements ActionListener {
 		this.setVisible(true);
 	}
 
+	public void addActionListenerMultiThread() {
+		multiThread.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				JCheckBox cb = (JCheckBox) event.getSource();
+				if (cb.isSelected()) {
+					comboNbThreads.show();
+				} else {
+					comboNbThreads.hide();
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
@@ -70,42 +100,15 @@ public class FenetreMenu extends JFrame implements ActionListener {
 		}
 		if (source == lancerSimu) {
 			Execute.NB_PATTERNS = comboNbPatterns.getSelectedIndex() + 1;
-			ParseData parseData = new ParseData();
-			Data d;
-			try {
-				d = parseData.buildData(infosFichier.getText());
-				if (d.testIsPossible()) {
-					RecuitSimule rs = new RecuitSimule(d);
-					long tempsDebut = System.currentTimeMillis();
-					rs.lancer();
-					long tempsFin = System.currentTimeMillis();
-					float seconds = (tempsFin - tempsDebut) / 1000F;
-					System.out.println("Opération effectuée en: "
-							+ Float.toString(seconds) + " secondes.");
-				} else {
-					JOptionPane jop = new JOptionPane();
-					jop.showMessageDialog(
-							null,
-							"La taille des images est supérieur aux patterns disponibles.",
-							"Erreur", JOptionPane.ERROR_MESSAGE);
-				}
-			} catch (IOException e) {
-				System.out
-						.println("Unable to parse data. Veuillez selectionner un fichier valide...");
-				// Boîte du message d'erreur
-				JOptionPane jop = new JOptionPane();
-				jop.showMessageDialog(
-						null,
-						"Unable to parse data. Veuillez selectionner un fichier valide...",
-						"Erreur", JOptionPane.ERROR_MESSAGE);
-			} catch (MonException e) {
-				System.out.println("Unable to find an initial solution...");
-				// Boîte du message d'erreur
-				JOptionPane jop = new JOptionPane();
-				jop.showMessageDialog(null,
-						"Unable to find an initial solution... :(", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
+			// Cas multi-thread : utilise les fonctions de stats
+			if (multiThread.isEnabled()) {
+				Execute.NB_TEST_WITH_SAME_PARAMETERS = comboNbThreads
+						.getSelectedIndex() + 2;
+			} else {
+				// Cas 1 thread
+				Execute.NB_TEST_WITH_SAME_PARAMETERS = 1;
 			}
+			Execute.genereData(infosFichier.getText());
 
 		}
 	}
