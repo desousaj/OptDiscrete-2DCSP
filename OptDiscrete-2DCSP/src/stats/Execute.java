@@ -18,6 +18,7 @@ public class Execute {
 	public final static double TEMP_INIT = 7000;
 	public final static int NB_ITER = 1500;
 	public final static double FACT_DECR = 0.3;
+	public final static boolean SHOW_TEMP = true;
 
 	public static void main(String[] args) throws IOException {
 		// 4 PATTERNS
@@ -44,7 +45,7 @@ public class Execute {
 		// de 13 à 16 PATTERNS
 		for (int i = 22; i > 18; i--) {
 			Execute.NB_PATTERNS = i;
-			genereData("data_50Valpha");
+			// genereData("data_50Valpha");
 			genereData("data_50Lalpha");
 
 		}
@@ -55,6 +56,8 @@ public class Execute {
 		// Traitement sur le nom du fichier pour vérifier s'il s'agit du path ou
 		// du nom
 		String nameFile = path;
+		System.out.println("Nombre de Threads : "
+				+ NB_TEST_WITH_SAME_PARAMETERS);
 		if (path.contains("\\")) {
 			nameFile = path.replace("\\", "\\\\");
 			String[] fileNameTab = nameFile.split("\\\\");

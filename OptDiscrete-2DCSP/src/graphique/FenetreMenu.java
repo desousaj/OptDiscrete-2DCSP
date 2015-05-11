@@ -54,6 +54,7 @@ public class FenetreMenu extends JFrame implements ActionListener {
 		panNbPatterns.add(multiThreadPanel);
 		this.add(panNbPatterns, BorderLayout.NORTH);
 		addActionListenerMultiThread();
+		multiThread.setSelected(false);
 		comboNbThreads.hide();
 
 		ouvrirFichier.addActionListener(this);
@@ -101,12 +102,14 @@ public class FenetreMenu extends JFrame implements ActionListener {
 		if (source == lancerSimu) {
 			Execute.NB_PATTERNS = comboNbPatterns.getSelectedIndex() + 1;
 			// Cas multi-thread : utilise les fonctions de stats
-			if (multiThread.isEnabled()) {
+			if (multiThread.isSelected()) {
 				Execute.NB_TEST_WITH_SAME_PARAMETERS = comboNbThreads
 						.getSelectedIndex() + 2;
+				System.out.println("---------Multi threads-----------");
 			} else {
 				// Cas 1 thread
 				Execute.NB_TEST_WITH_SAME_PARAMETERS = 1;
+				System.out.println("---------Single thread-----------");
 			}
 			Execute.genereData(infosFichier.getText());
 

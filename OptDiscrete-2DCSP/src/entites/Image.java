@@ -5,18 +5,17 @@ import java.awt.Color;
 public class Image {
 	private Dimension dimension;
 	private Color couleur;
-	private Coordonnees coordonnees;
+	// private Coordonnees coordonnees;
 	private int quantite;
 	private int indice;
 	private boolean isRotate;
 
-	public Image(int indice, Dimension dimension, Color couleur,
-			Coordonnees coordonnees) {
+	public Image(int indice, Dimension dimension, Color couleur) {
 		super();
 		this.setIndice(indice);
 		this.dimension = dimension;
 		this.couleur = couleur;
-		this.coordonnees = coordonnees;
+		// this.coordonnees = coordonnees;
 		this.isRotate = false;
 	}
 
@@ -26,7 +25,7 @@ public class Image {
 		this.dimension = dimension;
 		this.couleur = couleur;
 		this.quantite = quantite;
-		this.coordonnees = null;
+		// this.coordonnees = null;
 		this.isRotate = false;
 	}
 
@@ -56,13 +55,13 @@ public class Image {
 		this.couleur = couleur;
 	}
 
-	public Coordonnees getCoordonnees() {
-		return coordonnees;
-	}
-
-	public void setCoordonnees(Coordonnees coordonnees) {
-		this.coordonnees = coordonnees;
-	}
+	// public Coordonnees getCoordonnees() {
+	// return coordonnees;
+	// }
+	//
+	// public void setCoordonnees(Coordonnees coordonnees) {
+	// this.coordonnees = coordonnees;
+	// }
 
 	public int getQuantite() {
 		return quantite;
@@ -86,9 +85,9 @@ public class Image {
 			txt = txt.concat("\t Couleur :" + couleur.toString() + "\n");
 		}
 		txt = txt.concat("\t Quantite :" + quantite + "\n");
-		if (coordonnees != null) {
-			txt = txt.concat("\t" + coordonnees.toString());
-		}
+		// if (coordonnees != null) {
+		// txt = txt.concat("\t" + coordonnees.toString());
+		// }
 		return txt;
 	}
 
@@ -110,7 +109,7 @@ public class Image {
 
 	@Override
 	public Image clone() {
-		return new Image(indice, dimension, couleur, coordonnees);
+		return new Image(indice, dimension, couleur);
 	}
 
 }

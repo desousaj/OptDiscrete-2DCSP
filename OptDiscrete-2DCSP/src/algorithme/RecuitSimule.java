@@ -8,7 +8,9 @@ import java.util.Random;
 
 import parse.Data;
 import stats.Execute;
+
 import composition.Composition;
+
 import entites.Bin;
 import entites.Planche;
 import exception.MonException;
@@ -153,11 +155,8 @@ public class RecuitSimule {
 		for (int n = 0; n < Integer.MAX_VALUE; n++) {
 			// Prepare les valeurs d'une solution
 			for (int i = 0; i < this.data.getNbImages(); i++) {
-				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS)); // donne
-																		// un nb
-																		// entre
-																		// 0 et
-																		// NB_PATTERNS-1
+				// donne un nb entre 0 et NB_PATTERNS-1
+				numRandomPattern = rand.nextInt((Execute.NB_PATTERNS));
 				for (int j = 0; j < Execute.NB_PATTERNS; j++) {
 					temp_sol[j][i] = numRandomPattern == j ? 1 : 0;
 				}
@@ -187,13 +186,6 @@ public class RecuitSimule {
 			System.out.println("Initial solution was not found... Abord");
 			throw new MonException();
 		}
-
-		// Affichage solution de base - Test - TODO delete this
-		// int i = 0;
-		// for (Planche p : solution.getPlanches()) {
-		// System.out.println("Planche " + i + "\n" + p.toString());
-		// i++;
-		// }
 
 	}
 
@@ -244,6 +236,10 @@ public class RecuitSimule {
 		// initialiserTemperature();
 		meilleureValeur = solutionCourante.fonctionObjectif();
 		meilleureSolution = solutionCourante.clone();
+
+		if (Execute.SHOW_TEMP) {
+			System.out.println("Température : " + temperature);
+		}
 
 		// Les paliers de temperature
 		while (testerCondition1()) {
@@ -300,8 +296,6 @@ public class RecuitSimule {
 		// afficherSolution(meilleureSolution, "Meilleur");
 	}
 
-	// }
-
 	private Map<Integer, List<Bin>> reconstruireBin(List<Bin> listBins) {
 		Map<Integer, List<Bin>> map = new HashMap<Integer, List<Bin>>();
 		for (Bin b : listBins) {
@@ -355,7 +349,6 @@ public class RecuitSimule {
 	 *         false sinon.
 	 */
 	protected boolean testerCondition1() {
-		// System.out.println("Temperature : " + temperature);
 		if (temperature > temperatureFinale) {
 			return true;
 		} else {
@@ -440,6 +433,9 @@ public class RecuitSimule {
 	 */
 	private void decroitreTemperature() {
 		temperature *= facteurDecroissance;
+		if (Execute.SHOW_TEMP) {
+			System.out.println("Température : " + temperature);
+		}
 	}
 
 	/**
@@ -490,15 +486,6 @@ public class RecuitSimule {
 			}
 			test = testPlacement(voisin);
 
-			// Affichage solution de base - Test - TODO delete this
-			// int i = 0;
-			// System.out.println("----------------");
-			// System.out.println(test);
-			// for (Planche p : voisin.getPlanches()){
-			// System.out.println("Planche " + i +
-			// "\n" +p.toString());
-			// i++;
-			// }
 		}
 		return voisin;
 	};
