@@ -18,6 +18,11 @@ import stats.Execute;
 
 public class FenetreMenu extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private JButton ouvrirFichier = new JButton("Sélectionner un fichier");
 	private JTextField infosFichier = new JTextField("");
 	private JComboBox<String> comboNbPatterns;
@@ -36,7 +41,8 @@ public class FenetreMenu extends JFrame implements ActionListener {
 
 		JPanel panNbPatterns = new JPanel();
 		String[] tabNbPatterns = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
-				"10" };
+				"10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+				"20" };
 		String[] tabNbThread = { "2", "3", "4", "5" };
 		comboNbPatterns = new JComboBox<String>(tabNbPatterns);
 		comboNbThreads = new JComboBox<String>(tabNbThread);
@@ -75,7 +81,6 @@ public class FenetreMenu extends JFrame implements ActionListener {
 
 	public void addActionListenerMultiThread() {
 		multiThread.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JCheckBox cb = (JCheckBox) event.getSource();
@@ -88,7 +93,6 @@ public class FenetreMenu extends JFrame implements ActionListener {
 		});
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
@@ -111,7 +115,8 @@ public class FenetreMenu extends JFrame implements ActionListener {
 				Execute.NB_TEST_WITH_SAME_PARAMETERS = 1;
 				System.out.println("---------Single thread-----------");
 			}
-			Execute.genereData(infosFichier.getText());
+			Execute e = new Execute();
+			e.genereData(infosFichier.getText());
 
 		}
 	}

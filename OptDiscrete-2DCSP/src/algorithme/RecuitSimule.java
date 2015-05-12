@@ -463,7 +463,7 @@ public class RecuitSimule {
 			pattern = rand.nextInt(Execute.NB_PATTERNS);
 			image = rand.nextInt(this.data.getNbImages());
 			voisin.getPlanches().get(pattern).getComposition()
-					.getCompoPlanche()[image] += 1;
+					.getCompoPlanche()[image] += 2;
 
 			// 2eme transformation : suppresion d'une image dans un pattern
 			pattern = rand.nextInt(Execute.NB_PATTERNS);
@@ -481,7 +481,7 @@ public class RecuitSimule {
 				if (voisin.getPlanches().get(pattern).getComposition()
 						.getCompoPlanche()[image] != 0) {
 					voisin.getPlanches().get(pattern).getComposition()
-							.getCompoPlanche()[image] -= 1;
+							.getCompoPlanche()[image] -= 2;
 				}
 			}
 			test = testPlacement(voisin);

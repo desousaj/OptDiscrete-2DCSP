@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import javax.swing.JOptionPane;
+
 public class Execute {
 
 	public static int NB_PATTERNS = 11;
@@ -20,25 +22,31 @@ public class Execute {
 	public final static double FACT_DECR = 0.3;
 	public final static boolean SHOW_TEMP = true;
 
+	public Execute() {
+
+	}
+
 	public static void main(String[] args) throws IOException {
+		Execute e = new Execute();
+
 		// 4 PATTERNS
-		// genereData("data_20Salpha");
+		// e.genereData("data_20Salpha");
 		// 5 PATTERNS
-		// genereData("data_20Valpha");
-		// genereData("data_20Lalpha");
+		// e.genereData("data_20Valpha");
+		// e.genereData("data_20Lalpha");
 		// 6 PATTERNS
-		// genereData("data_30Salpha");
+		// e.genereData("data_30Salpha");
 		// 10 PATTERNS
-		// genereData("data_30Valpha");
-		// genereData("data_30Lalpha");
+		// e.genereData("data_30Valpha");
+		// e.genereData("data_30Lalpha");
 		// 11 PATTERNS
-		// genereData("data_40Salpha");
+		// e.genereData("data_40Salpha");
 
 		// de 13 à 18 PATTERNS
 		// for (int i = 18; i > 14; i--) {
 		// Execute.NB_PATTERNS = i;
-		// genereData("data_40Valpha");
-		// genereData("data_40Lalpha");
+		// e.genereData("data_40Valpha");
+		// e.genereData("data_40Lalpha");
 		//
 		// }
 
@@ -46,13 +54,13 @@ public class Execute {
 		for (int i = 22; i > 18; i--) {
 			Execute.NB_PATTERNS = i;
 			// genereData("data_50Valpha");
-			genereData("data_50Lalpha");
+			e.genereData("data_50Lalpha");
 
 		}
 
 	}
 
-	public static void genereData(String path) {
+	public void genereData(String path) {
 		// Traitement sur le nom du fichier pour vérifier s'il s'agit du path ou
 		// du nom
 		String nameFile = path;
@@ -79,28 +87,40 @@ public class Execute {
 		for (int i = 0; i < NB_TEST_WITH_SAME_PARAMETERS; i++) {
 			TestThread callable1 = new TestThread(TEMP_FINALE, TEMP_INIT,
 					NB_ITER, FACT_DECR, file, path);
-
 			FutureTask<Resultat> futureTask1 = new FutureTask<Resultat>(
 					callable1);
 			listTasks.add(futureTask1);
 			executor.execute(futureTask1);
 		}
 
+		boolean stop = false;
 		Iterator<FutureTask<Resultat>> iterator = listTasks.iterator();
-		while (!listTasks.isEmpty()) {
+		while (!listTasks.isEmpty() && !stop) {
 			for (int i = 0; i < listTasks.size(); i++) {
 				FutureTask<Resultat> task = listTasks.get(i);
 				if (task.isDone()) {
 					System.out.println("Done");
 					try {
-						if (task.get() != null)
+						if (task.get() != null) {
 							listResultats.add(task.get());
-						listTasks.remove(i);
-						break;
+						} else {
+							stop = true;
+							executor.shutdownNow();
+							JOptionPane
+									.showMessageDialog(
+											null,
+											"Une erreur est survenue. Veuillez choisir un fichier texte valide, ainsi qu'un nombre de pattern suffisant...",
+											"Erreur", JOptionPane.ERROR_MESSAGE);
+							break;
+						}
 					} catch (InterruptedException | ExecutionException e) {
-						System.out.println("Unable to add task !");
-						e.printStackTrace();
+						System.out.println("Unable to complete task ...");
+						break;
 					}
+					if (stop) {
+						break;
+					}
+					listTasks.remove(i);
 
 				}
 			}

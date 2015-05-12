@@ -1,6 +1,7 @@
 package graphique;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class PanelPattern extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		g.setFont(new Font(FenetrePattern.FONT, Font.PLAIN,
+				FenetrePattern.FONT_SIZE));
 		double ratioLargeur = this.getWidth()
 				/ data.getPlanche().getDimension().getLargeur();
 		double ratioHauteur = this.getHeight()
@@ -60,7 +63,7 @@ public class PanelPattern extends JPanel {
 				g.drawRect(x, y, largeur, hauteur);
 				g.setColor(i.getCouleur());
 				g.fillRect(x + 1, y + 1, largeur - 1, hauteur - 1);
-				g.setColor(Color.BLACK);
+				g.setColor(Color.WHITE);
 				g.drawString(Integer.toString(b.getIdImage()),
 						(x + largeur / 2), (y + hauteur / 2));
 			}
