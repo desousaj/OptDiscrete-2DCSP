@@ -130,7 +130,7 @@ public class Execute {
 		if (listResultats != null && !listResultats.isEmpty()) {
 			String fileExcel = nameFile + ".xls";
 			GenerateExcelData data = new GenerateExcelData(listResultats,
-					"C:/", fileExcel);
+					System.getProperty("user.dir"), fileExcel);
 			data.genereData();
 		}
 	}
