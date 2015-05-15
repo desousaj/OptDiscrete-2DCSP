@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,11 +17,12 @@ public class Execute {
 	public static int NB_PATTERNS = 11;
 	public static int NB_TEST_WITH_SAME_PARAMETERS = 3;
 	public static String TEXTE_FILE_NAME = "data_30Valpha";
-	public final static double TEMP_FINALE = 0.9;
-	public final static double TEMP_INIT = 7000;
-	public final static int NB_ITER = 1500;
-	public final static double FACT_DECR = 0.3;
 	public final static boolean SHOW_TEMP = true;
+
+	public static double TEMP_FINALE = 0.9;
+	public static double TEMP_INIT = 7000;
+	public static int NB_ITER = 1500;
+	public static double FACT_DECR = 0.3;
 
 	public Execute() {
 
@@ -49,15 +51,53 @@ public class Execute {
 		// e.genereData("data_40Lalpha");
 		//
 		// }
+		while (true) {
+			// Tourner
 
-		// de 13 à 16 PATTERNS
-		for (int i = 22; i > 18; i--) {
-			Execute.NB_PATTERNS = i;
-			// genereData("data_50Valpha");
-			e.genereData("data_50Lalpha");
+			// for (int i = 8; i > 3; i--) {
+			// Execute.NB_PATTERNS = i;
+			// Execute.NB_ITER = Execute.random(1000, 2000);
+			// Execute.TEMP_INIT = Execute.random(1000, 10000);
+			// Execute.TEMP_FINALE = Execute.randomDouble(0.1, 0.9);
+			// Execute.FACT_DECR = Execute.randomDouble(0.1, 0.9);
+			// e.genereData("data_20Salpha");
+			// e.genereData("data_20Valpha");
+			// e.genereData("data_20Lalpha");
+			// e.genereData("data_30Salpha");
+			//
+			// }
 
+			// de 13 à 16 PATTERNS
+			for (int i = 22; i > 18; i--) {
+				Execute.NB_PATTERNS = i;
+				Execute.NB_ITER = Execute.random(1000, 2000);
+				Execute.TEMP_INIT = Execute.random(1000, 10000);
+				Execute.TEMP_FINALE = Execute.randomDouble(0.1, 0.9);
+				Execute.FACT_DECR = Execute.randomDouble(0.1, 0.9);
+				System.out.println("nb pattern : " + Execute.NB_PATTERNS);
+				System.out.println(Execute.NB_ITER);
+				System.out.println(Execute.TEMP_INIT);
+				System.out.println(Execute.TEMP_FINALE);
+				System.out.println(Execute.FACT_DECR);
+				e.genereData("data_40Salpha");
+				e.genereData("data_40Valpha");
+				e.genereData("data_40Lalpha");
+				e.genereData("data_50Salpha");
+				e.genereData("data_50Valpha");
+				e.genereData("data_50Lalpha");
+
+			}
 		}
 
+	}
+
+	public static int random(int inf, int sup) {
+		return (int) (Math.random() * (sup - inf)) + inf;
+	}
+
+	public static double randomDouble(double inf, double sup) {
+		Random r = new Random();
+		return inf + (sup - inf) * r.nextDouble();
 	}
 
 	public void genereData(String path) {
